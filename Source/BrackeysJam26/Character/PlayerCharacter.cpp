@@ -2,7 +2,7 @@
 
 APlayerCharacter::APlayerCharacter()
 {
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 }
 
@@ -12,15 +12,31 @@ void APlayerCharacter::BeginPlay()
 	
 }
 
-void APlayerCharacter::Tick(float DeltaTime)
+void APlayerCharacter::Move(const FVector2D& Value)
 {
-	Super::Tick(DeltaTime);
+	if (!Controller) return;
+
+	const FRotator Rotation = Controller->GetControlRotation();
+
+	const FRotator YawRotation(0, Rotation.Yaw, 0);
+	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+
+	AddMovementInput(ForwardDirection, Value.Y);
+	AddMovementInput(RightDirection, Value.X);
+}
+
+void APlayerCharacter::Jump()
+{
+	Super::Jump();
 
 }
 
-void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
+//void APlayerCharacter::Tick(float DeltaTime)
+//{
+//	Super::Tick(DeltaTime);
+//
+//}
 
-}
+
 
