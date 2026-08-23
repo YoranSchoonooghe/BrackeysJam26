@@ -29,13 +29,15 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Input|Actions")
 	TObjectPtr<UInputAction> MoveAction;
-
 	UPROPERTY(EditAnywhere, Category = "Input|Actions")
 	TObjectPtr<UInputAction> JumpAction;
+	UPROPERTY(EditAnywhere, Category = "Input|Actions")
+	TObjectPtr<UInputAction> LookAction;
 
 private:
 	void Move(const FInputActionValue& Value);
 	void Jump();
+	void Look(const FInputActionValue& Value);
 
 	UPROPERTY()
 	TObjectPtr<APlayerCharacter> CachedPlayerCharacter;

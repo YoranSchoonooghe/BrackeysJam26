@@ -35,6 +35,9 @@ void ADefaultPlayerController::SetupInputComponent()
 
 		if (JumpAction)
 			EIC->BindAction(JumpAction, ETriggerEvent::Started, this, &ADefaultPlayerController::Jump);
+
+		if (LookAction)
+			EIC->BindAction(LookAction, ETriggerEvent::Triggered, this, &ADefaultPlayerController::Look);
 	}
 }
 
@@ -67,4 +70,14 @@ void ADefaultPlayerController::Jump()
 	if (!CachedPlayerCharacter) return;
 
 	CachedPlayerCharacter->Jump();
+}
+
+void ADefaultPlayerController::Look(const FInputActionValue& Value)
+{
+	if (!CachedPlayerCharacter) return;
+
+	FVector2D CameraMovementVector = Value.Get<FVector2D>();
+	if (CameraMovementVector.Length() < 0.1f) return;
+
+	CachedPlayerCharacter->Look(CameraMovementVector);
 }
