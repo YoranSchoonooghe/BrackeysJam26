@@ -4,6 +4,8 @@
 #include "GameFramework/Actor.h"
 #include "Bus.generated.h"
 
+class USplineComponent;
+
 UCLASS()
 class BRACKEYSJAM26_API ABus : public AActor
 {
@@ -17,8 +19,12 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<UStaticMeshComponent> Mesh;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	TObjectPtr<USplineComponent> Spline;
 
 public:	
 	//virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION()
+	USplineComponent* GetSpline() const { return Spline; }
 };
