@@ -38,6 +38,9 @@ void ADefaultPlayerController::SetupInputComponent()
 
 		if (LookAction)
 			EIC->BindAction(LookAction, ETriggerEvent::Triggered, this, &ADefaultPlayerController::Look);
+
+		if (InteractAction)
+			EIC->BindAction(InteractAction, ETriggerEvent::Started, this, &ADefaultPlayerController::Interact);
 	}
 }
 
@@ -80,4 +83,12 @@ void ADefaultPlayerController::Look(const FInputActionValue& Value)
 	if (CameraMovementVector.Length() < 0.1f) return;
 
 	CachedPlayerCharacter->Look(CameraMovementVector);
+}
+
+void ADefaultPlayerController::Interact()
+{
+	if (CachedPlayerCharacter)
+	{
+		CachedPlayerCharacter->Interact();
+	}
 }

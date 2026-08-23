@@ -25,15 +25,22 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
 	float MaxLookPitch{ 70.0f };
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
+	float InteractRange{ 250.0f };
+
 public:	
 	//virtual void Tick(float DeltaTime) override;
 
 	void Move(const FVector2D& Value);
 	virtual void Jump() override;
 	void Look(const FVector2D& Value);
+	void Interact();
 
 	void ClampLookAngle();
 
 	float InitialControlYaw{ 0.0f };
 	float InitialControlPitch{ 0.0f };
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Interaction")
+	void OnInteractHit(AActor* HitActor);
 };

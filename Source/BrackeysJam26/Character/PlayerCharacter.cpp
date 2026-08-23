@@ -1,6 +1,6 @@
 #include "PlayerCharacter.h"
 #include "Camera/CameraComponent.h"
-
+#include "../InteractableInterface.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -61,6 +61,28 @@ void APlayerCharacter::Look(const FVector2D& Value)
 	AddControllerPitchInput(-Value.Y);
 
 	ClampLookAngle();
+}
+
+void APlayerCharacter::Interact()
+{
+	if (!FollowCamera) return;
+
+	FVector Start = FollowCamera->GetComponentLocation();
+	FVector End = Start + (FollowCamera->GetForwardVector() * InteractRange);
+
+	FHitResult HitResult;
+	FCollisionQueryParams CollisionParams;
+	CollisionParams.AddIgnoredActor(this);
+
+	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, CollisionParams);
+
+	if (bHit && HitResult.GetActor())
+	{
+		if (HitResult.GetActor()->Implements<UInteractableInterface>())
+		{
+			IInteractableInterface::Execute_Interact(HitResult.GetActor());
+		}
+	}
 }
 
 void APlayerCharacter::ClampLookAngle()

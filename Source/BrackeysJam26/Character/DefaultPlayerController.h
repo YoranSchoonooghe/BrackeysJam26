@@ -34,10 +34,14 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Input|Actions")
 	TObjectPtr<UInputAction> LookAction;
 
+	UPROPERTY(EditAnywhere, Category = "Input|Actions")
+	TObjectPtr<UInputAction> InteractAction;
+
 private:
 	void Move(const FInputActionValue& Value);
 	void Jump();
 	void Look(const FInputActionValue& Value);
+	void Interact();
 
 	UPROPERTY()
 	TObjectPtr<APlayerCharacter> CachedPlayerCharacter;

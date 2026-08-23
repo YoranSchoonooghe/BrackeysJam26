@@ -1,0 +1,29 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "SteeringWheel.h"
+
+ASteeringWheel::ASteeringWheel()
+{
+	PrimaryActorTick.bCanEverTick = false;
+}
+
+void ASteeringWheel::BeginPlay()
+{
+    Super::BeginPlay();
+
+    if (BusToAttachTo)
+    {
+        // Attach this wheel to the Bus, keeping its current world position
+        FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepWorld, true);
+        AttachToActor(BusToAttachTo, AttachmentRules);
+    }
+}
+
+void ASteeringWheel::Interact_Implementation()
+{
+	if (RouteManager)
+	{
+		RouteManager->StartDeparture();
+	}
+}
