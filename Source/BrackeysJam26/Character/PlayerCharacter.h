@@ -4,7 +4,6 @@
 #include "GameFramework/Character.h"
 #include "PlayerCharacter.generated.h"
 
-class USpringArmComponent;
 class UCameraComponent;
 
 UCLASS()
@@ -19,10 +18,12 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-	TObjectPtr<USpringArmComponent> CameraBoom;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<UCameraComponent> FollowCamera;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
+	float MaxLookYaw{ 90.0f };
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
+	float MaxLookPitch{ 70.0f };
 
 public:	
 	//virtual void Tick(float DeltaTime) override;
@@ -31,4 +32,8 @@ public:
 	virtual void Jump() override;
 	void Look(const FVector2D& Value);
 
+	void ClampLookAngle();
+
+	float InitialControlYaw{ 0.0f };
+	float InitialControlPitch{ 0.0f };
 };
