@@ -8,6 +8,7 @@
 class UInputMappingContext;
 class UInputAction;
 class APlayerCharacter;
+class ANPCCharacter;
 
 UCLASS()
 class BRACKEYSJAM26_API ADefaultPlayerController : public APlayerController
@@ -37,6 +38,13 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Input|Actions")
 	TObjectPtr<UInputAction> InteractAction;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
+	TSubclassOf<UUserWidget> PermissionWidgetClass;
+
+public:
+	void ShowPermissionWidget(ANPCCharacter* NPC);
+	void HidePermissionWidget();
+
 private:
 	void Move(const FInputActionValue& Value);
 	void Jump();
@@ -45,4 +53,7 @@ private:
 
 	UPROPERTY()
 	TObjectPtr<APlayerCharacter> CachedPlayerCharacter;
+
+	UPROPERTY()
+	TObjectPtr<UUserWidget> PermissionWidgetInstance;
 };

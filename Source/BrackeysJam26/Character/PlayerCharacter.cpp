@@ -1,6 +1,7 @@
 #include "PlayerCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "../InteractableInterface.h"
+#include "BrackeysJam26/NPC/NPCCharacter.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -83,6 +84,13 @@ void APlayerCharacter::Interact()
 			IInteractableInterface::Execute_Interact(HitResult.GetActor());
 		}
 	}
+}
+
+void APlayerCharacter::SetTargetNPC(ANPCCharacter* NPCCharacter)
+{
+	if (!NPCCharacter || TargetNPC == NPCCharacter) return;
+
+	TargetNPC = NPCCharacter;
 }
 
 void APlayerCharacter::ClampLookAngle()

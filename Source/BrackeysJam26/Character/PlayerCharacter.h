@@ -5,6 +5,7 @@
 #include "PlayerCharacter.generated.h"
 
 class UCameraComponent;
+class ANPCCharacter;
 
 UCLASS()
 class BRACKEYSJAM26_API APlayerCharacter : public ACharacter
@@ -36,11 +37,18 @@ public:
 	void Look(const FVector2D& Value);
 	void Interact();
 
+	void SetTargetNPC(ANPCCharacter* NPCCharacter);
+	ANPCCharacter* GetTargetNPC() const { return TargetNPC; }
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Interaction")
+	void OnInteractHit(AActor* HitActor);
+
+private:
 	void ClampLookAngle();
 
 	float InitialControlYaw{ 0.0f };
 	float InitialControlPitch{ 0.0f };
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "Interaction")
-	void OnInteractHit(AActor* HitActor);
+	ANPCCharacter* TargetNPC;
+
 };

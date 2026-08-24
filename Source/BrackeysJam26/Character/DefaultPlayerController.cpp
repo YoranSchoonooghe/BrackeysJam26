@@ -2,9 +2,13 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "PlayerCharacter.h"
+#include "Blueprint/UserWidget.h"
+#include "BrackeysJam26/HUD/PermissionWidget.h"
+#include "BrackeysJam26/NPC/NPCCharacter.h"
 
 ADefaultPlayerController::ADefaultPlayerController()
 {
+
 }
 
 void ADefaultPlayerController::BeginPlay()
@@ -49,6 +53,11 @@ void ADefaultPlayerController::OnPossess(APawn* InPawn)
 	Super::OnPossess(InPawn);
 
 	CachedPlayerCharacter = Cast<APlayerCharacter>(InPawn);
+
+	if (PermissionWidgetClass)
+	{
+		PermissionWidgetInstance = CreateWidget<UPermissionWidget>(this, PermissionWidgetClass);
+	}
 }
 
 void ADefaultPlayerController::OnUnPossess()
@@ -56,6 +65,21 @@ void ADefaultPlayerController::OnUnPossess()
 	Super::OnUnPossess();
 
 	CachedPlayerCharacter = nullptr;
+}
+
+void ADefaultPlayerController::ShowPermissionWidget(ANPCCharacter* NPC)
+{
+	if (!PermissionWidgetInstance) return;
+	
+	CachedPlayerCharacter->SetTargetNPC(NPC);
+	PermissionWidgetInstance->AddToViewport();
+}
+
+void ADefaultPlayerController::HidePermissionWidget()
+{
+	if (!PermissionWidgetInstance) return;
+
+	PermissionWidgetInstance->RemoveFromParent();
 }
 
 void ADefaultPlayerController::Move(const FInputActionValue& Value)

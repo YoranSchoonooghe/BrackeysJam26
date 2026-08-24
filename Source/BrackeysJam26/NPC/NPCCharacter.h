@@ -4,7 +4,15 @@
 #include "GameFramework/Character.h"
 #include "NPCCharacter.generated.h"
 
-class USplineFollowComponent;
+UENUM(BlueprintType)
+enum class ENPCState : uint8
+{
+	Wait,
+	EnterBus,
+	WalkToSeat,
+	Sitting,
+	ExitBus
+};
 
 UCLASS()
 class BRACKEYSJAM26_API ANPCCharacter : public ACharacter
@@ -17,12 +25,15 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-	TObjectPtr<USplineFollowComponent> SplineFollow;
-
 public:
 	//virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION()
+	void ChangeState(ENPCState NewState);
+
+	UFUNCTION()
+	ENPCState GetState() const { return NPCState; }
+
 private:
-	float CurrentSplineDistance{ 0.0f };
+	ENPCState NPCState{ ENPCState::EnterBus };
 };

@@ -1,0 +1,56 @@
+#include "NPCAIController.h"
+#include "BehaviorTree/BlackboardComponent.h"
+#include <Kismet/GameplayStatics.h>
+#include "GameFramework/Character.h"
+#include "BrackeysJam26/Bus/Bus.h"
+#include "BrackeysJam26/Bus/BusSeat.h"
+
+
+ANPCAIController::ANPCAIController()
+{
+	PrimaryActorTick.bCanEverTick = false;
+
+}
+
+void ANPCAIController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	RunBehaviorTree(BTNPC);
+	InitBBKeys();
+}
+
+void ANPCAIController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+}
+
+void ANPCAIController::OnPossess(APawn* InPawn)
+{
+	Super::OnPossess(InPawn);
+
+}
+
+void ANPCAIController::InitBBKeys()
+{
+	auto* pBlackboardComponent = GetBlackboardComponent();
+	if (!pBlackboardComponent) return;
+
+	ABus* Bus = Cast<ABus>(UGameplayStatics::GetActorOfClass(GetWorld(), ABus::StaticClass()));
+
+	if (Bus)
+	{
+		auto checkLocation = Bus->GetCheckLocation();
+		pBlackboardComponent->SetValueAsVector(TEXT("CheckLocation"), checkLocation);
+
+		auto exitLocation = Bus->GetExitLocation();
+		pBlackboardComponent->SetValueAsVector(TEXT("ExitLocation"), exitLocation);
+
+		auto seat = Bus->GetAvailableSeat();
+		if (seat)
+		{
+			pBlackboardComponent->SetValueAsObject(TEXT("TargetSeat"), seat);
+		}
+	}
+}
