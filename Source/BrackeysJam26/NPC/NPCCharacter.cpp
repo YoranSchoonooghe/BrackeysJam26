@@ -1,6 +1,7 @@
 #include "NPCCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "BrackeysJam26/Components/SplineFollowComponent.h"
+#include "Components/CapsuleComponent.h"
 
 ANPCCharacter::ANPCCharacter()
 {
@@ -15,6 +16,12 @@ void ANPCCharacter::BeginPlay()
 
 }
 
+//void ANPCCharacter::Tick(float DeltaTime)
+//{
+//	Super::Tick(DeltaTime);
+//
+//}
+
 void ANPCCharacter::ChangeState(ENPCState NewState)
 {
 	if (NPCState == NewState) return;
@@ -22,9 +29,24 @@ void ANPCCharacter::ChangeState(ENPCState NewState)
 	NPCState = NewState;
 }
 
-//void ANPCCharacter::Tick(float DeltaTime)
-//{
-//	Super::Tick(DeltaTime);
-//
-//}
+void ANPCCharacter::Eject(float Force)
+{
+	if (NPCState != ENPCState::Sitting) return;
 
+	const FVector launchDirection = FMath::VRandCone(FVector::UpVector, FMath::DegreesToRadians(20.0f));
+
+	GetCharacterMovement()->DisableMovement();
+
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	if (USkeletalMeshComponent* MeshComp = GetMesh())
+	{
+		MeshComp->SetCollisionProfileName(TEXT("Ragdoll"));
+		MeshComp->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		MeshComp->SetSimulatePhysics(true);
+
+		MeshComp->AddImpulse(launchDirection * Force, NAME_None, true);
+
+		MeshComp->WakeAllRigidBodies();
+	}
+}

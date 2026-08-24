@@ -24,5 +24,7 @@ EBTNodeResult::Type UBTT_Sit::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uin
     NPCCharacter->ChangeState(ENPCState::Sitting);
     Seat->Occupy(NPCCharacter);
 
+    //NPCCharacter->Eject(20000.0f);
+
 	return EBTNodeResult::Succeeded;
 }

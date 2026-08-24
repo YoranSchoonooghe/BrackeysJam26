@@ -35,6 +35,14 @@ void ABusSeat::Leave()
 	Occupant = nullptr;
 }
 
+void ABusSeat::Eject()
+{
+	if (!IsOccupied()) return;
+
+	Occupant->Eject(EjectionForce);
+	Occupant = nullptr;
+}
+
 bool ABusSeat::IsOccupied() const
 {
 	return (Occupant != nullptr);

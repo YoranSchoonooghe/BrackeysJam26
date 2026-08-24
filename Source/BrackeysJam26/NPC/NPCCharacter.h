@@ -34,6 +34,9 @@ public:
 	UFUNCTION()
 	ENPCState GetState() const { return NPCState; }
 
+	UFUNCTION()
+	void Eject(float Force);
+
 private:
 	ENPCState NPCState{ ENPCState::EnterBus };
 };
