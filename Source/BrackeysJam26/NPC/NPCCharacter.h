@@ -38,5 +38,5 @@ public:
 	void Eject(float Force);
 
 private:
-	ENPCState NPCState{ ENPCState::EnterBus };
+	ENPCState NPCState{ ENPCState::Wait };
 };

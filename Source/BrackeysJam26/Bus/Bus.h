@@ -7,6 +7,7 @@
 class USplineComponent;
 class UArrowComponent;
 class ABusSeat;
+class UBusQueueComponent;
 
 UCLASS()
 class BRACKEYSJAM26_API ABus : public AActor
@@ -27,6 +28,8 @@ protected:
 	TObjectPtr<UArrowComponent> CheckLocation;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<UArrowComponent> ExitLocation;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	TObjectPtr<UBusQueueComponent> BusQueue;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Seats")
 	TArray<ABusSeat*> Seats;

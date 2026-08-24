@@ -2,6 +2,7 @@
 #include "Components/SplineComponent.h"
 #include "Components/ArrowComponent.h"
 #include "BusSeat.h"
+#include "BrackeysJam26/Components/BusQueueComponent.h"
 
 ABus::ABus()
 {
@@ -20,6 +21,8 @@ ABus::ABus()
 	CheckLocation->SetupAttachment(RootComponent);
 	ExitLocation = CreateDefaultSubobject<UArrowComponent>(TEXT("ExitLocation"));
 	ExitLocation->SetupAttachment(RootComponent);
+
+	BusQueue = CreateDefaultSubobject<UBusQueueComponent>(TEXT("BusQueue"));
 }
 
 void ABus::BeginPlay()

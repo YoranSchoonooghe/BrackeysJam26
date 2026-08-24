@@ -2,6 +2,9 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "BrackeysJam26/Components/SplineFollowComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "BrackeysJam26/Bus/Bus.h"
+#include "BrackeysJam26/Components/BusQueueComponent.h"
+#include <Kismet/GameplayStatics.h>
 
 ANPCCharacter::ANPCCharacter()
 {
@@ -27,6 +30,15 @@ void ANPCCharacter::ChangeState(ENPCState NewState)
 	if (NPCState == NewState) return;
 
 	NPCState = NewState;
+
+	if (NPCState == ENPCState::ExitBus || NPCState == ENPCState::WalkToSeat)
+	{
+		auto* Bus = Cast<ABus>(UGameplayStatics::GetActorOfClass(GetWorld(), ABus::StaticClass()));
+		if (auto* Queue = Bus->GetComponentByClass<UBusQueueComponent>())
+		{
+			Queue->StartNextPassenger();
+		}
+	}
 }
 
 void ANPCCharacter::Eject(float Force)
