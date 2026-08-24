@@ -10,10 +10,17 @@ void UPermissionWidget::AllowNPCOnBus()
 	if (!player) return;
 
 	auto* NPC = player->GetTargetNPC();
+	if (!NPC) return;
 	NPC->ChangeState(ENPCState::WalkToSeat);
 
-	auto* playerController = Cast<ADefaultPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-	playerController->HidePermissionWidget();
+	//auto* playerController = Cast<ADefaultPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	//playerController->HidePermissionWidget();
+
+	auto* monitorActor = Cast<AMonitorActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AMonitorActor::StaticClass()));
+	if (monitorActor)
+	{
+		monitorActor->ShowScreen(EMonitorScreen::Empty);
+	}
 }
 
 void UPermissionWidget::DenyNPCFromBus()
@@ -22,8 +29,16 @@ void UPermissionWidget::DenyNPCFromBus()
 	if (!player) return;
 
 	auto* NPC = player->GetTargetNPC();
+	if (!NPC) return;
 	NPC->ChangeState(ENPCState::ExitBus);
 
-	auto* playerController = Cast<ADefaultPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-	playerController->HidePermissionWidget();
+	//auto* playerController = Cast<ADefaultPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	//playerController->HidePermissionWidget();
+
+
+	auto* monitorActor = Cast<AMonitorActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AMonitorActor::StaticClass()));
+	if (monitorActor)
+	{
+		monitorActor->ShowScreen(EMonitorScreen::Empty);
+	}
 }

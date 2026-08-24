@@ -1,5 +1,6 @@
 #include "PlayerCharacter.h"
 #include "Camera/CameraComponent.h"
+#include "Components/WidgetInteractionComponent.h"
 #include "../InteractableInterface.h"
 #include "BrackeysJam26/NPC/NPCCharacter.h"
 
@@ -11,6 +12,10 @@ APlayerCharacter::APlayerCharacter()
 	FollowCamera->SetupAttachment(RootComponent);
 	FollowCamera->SetRelativeLocation(FVector(0.0f, 0.0f, BaseEyeHeight));
 	FollowCamera->bUsePawnControlRotation = true;
+
+	WidgetInteraction = CreateDefaultSubobject<UWidgetInteractionComponent>(TEXT("WidgetInteraction"));
+	WidgetInteraction->SetupAttachment(FollowCamera);
+	WidgetInteraction->InteractionSource = EWidgetInteractionSource::World;
 
 	GetMesh()->SetOwnerNoSee(true);
 }
@@ -25,6 +30,11 @@ void APlayerCharacter::BeginPlay()
 
 		InitialControlYaw = ControlRotation.Yaw;
 		InitialControlPitch = ControlRotation.Pitch;
+	}
+
+	if (WidgetInteraction)
+	{
+		WidgetInteraction->InteractionDistance = InteractRange;
 	}
 }
 
@@ -66,6 +76,13 @@ void APlayerCharacter::Look(const FVector2D& Value)
 
 void APlayerCharacter::Interact()
 {
+	if (WidgetInteraction && WidgetInteraction->IsOverInteractableWidget())
+	{
+		WidgetInteraction->PressPointerKey(EKeys::LeftMouseButton);
+		WidgetInteraction->ReleasePointerKey(EKeys::LeftMouseButton);
+		return;
+	}
+
 	if (!FollowCamera) return;
 
 	FVector Start = FollowCamera->GetComponentLocation();

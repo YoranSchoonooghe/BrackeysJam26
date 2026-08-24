@@ -5,6 +5,7 @@
 #include "Blueprint/UserWidget.h"
 #include "BrackeysJam26/HUD/PermissionWidget.h"
 #include "BrackeysJam26/NPC/NPCCharacter.h"
+#include "Kismet/GameplayStatics.h"
 
 ADefaultPlayerController::ADefaultPlayerController()
 {
@@ -15,6 +16,7 @@ void ADefaultPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
+	CachedMonitor = Cast<AMonitorActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AMonitorActor::StaticClass()));
 }
 
 void ADefaultPlayerController::SetupInputComponent()
@@ -80,6 +82,14 @@ void ADefaultPlayerController::HidePermissionWidget()
 	if (!PermissionWidgetInstance) return;
 
 	PermissionWidgetInstance->RemoveFromParent();
+}
+
+void ADefaultPlayerController::ShowMonitorScreen(EMonitorScreen Screen)
+{
+	if (CachedMonitor)
+	{
+		CachedMonitor->ShowScreen(Screen);
+	}
 }
 
 void ADefaultPlayerController::Move(const FInputActionValue& Value)

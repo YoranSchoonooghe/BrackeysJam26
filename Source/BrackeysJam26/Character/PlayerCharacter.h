@@ -6,6 +6,7 @@
 
 class UCameraComponent;
 class ANPCCharacter;
+class UWidgetInteractionComponent;
 
 UCLASS()
 class BRACKEYSJAM26_API APlayerCharacter : public ACharacter
@@ -20,6 +21,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<UCameraComponent> FollowCamera;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	TObjectPtr<UWidgetInteractionComponent> WidgetInteraction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
 	float MaxLookYaw{ 90.0f };

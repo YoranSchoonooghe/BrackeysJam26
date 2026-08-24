@@ -1,9 +1,10 @@
 #include "BTT_RequestPermission.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "AIController.h"
+#include "../../UI/MonitorActor.h"
 #include "BrackeysJam26/NPC/NPCCharacter.h"
 #include <Kismet/GameplayStatics.h>
-#include "BrackeysJam26/Character/DefaultPlayerController.h"
+#include "BrackeysJam26/Character/PlayerCharacter.h"
 
 EBTNodeResult::Type UBTT_RequestPermission::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
@@ -19,12 +20,16 @@ EBTNodeResult::Type UBTT_RequestPermission::ExecuteTask(UBehaviorTreeComponent& 
     auto* NPCCharacter = Cast<ANPCCharacter>(Pawn);
     if (!NPCCharacter) return EBTNodeResult::Failed;
 
-    auto* playerController = Cast<ADefaultPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-    if (!playerController) return EBTNodeResult::Failed;
+    auto* PlayerChar = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+    if (!PlayerChar) return EBTNodeResult::Failed;
 
+    auto* monitorActor = Cast<AMonitorActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AMonitorActor::StaticClass()));
+    if (monitorActor)
+    {
+        monitorActor->ShowScreen(EMonitorScreen::RequestPermission);
+    }
     NPCCharacter->ChangeState(ENPCState::Wait);
-    
-    playerController->ShowPermissionWidget(NPCCharacter);
+    PlayerChar->SetTargetNPC(NPCCharacter);
 
     return EBTNodeResult::Succeeded;
 }

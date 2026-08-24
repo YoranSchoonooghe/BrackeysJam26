@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "InputActionValue.h"
+#include "BrackeysJam26/UI/MonitorActor.h"
 #include "DefaultPlayerController.generated.h"
 
 class UInputMappingContext;
@@ -45,6 +46,9 @@ public:
 	void ShowPermissionWidget(ANPCCharacter* NPC);
 	void HidePermissionWidget();
 
+	UFUNCTION(BlueprintCallable, Category = "Monitor")
+	void ShowMonitorScreen(EMonitorScreen Screen);
+
 private:
 	void Move(const FInputActionValue& Value);
 	void Jump();
@@ -56,4 +60,7 @@ private:
 
 	UPROPERTY()
 	TObjectPtr<UUserWidget> PermissionWidgetInstance;
+
+	UPROPERTY()
+	TObjectPtr<AMonitorActor> CachedMonitor;
 };
