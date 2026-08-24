@@ -6,6 +6,9 @@
 #include "GameFramework/Actor.h"
 #include "BusRouteManager.generated.h"
 
+
+class ADataManager;
+
 UENUM(BlueprintType)
 enum class ETransitionState : uint8
 {
@@ -50,6 +53,12 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Transition")
 	void BP_ToggleLoadingImage(bool bShowImage);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "References")
+	ADataManager* DataManagerReference;
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Route")
+	void BP_UpdateStopScreen(const FString& NextStopName);
 
 private:
 	void PerformTeleport();

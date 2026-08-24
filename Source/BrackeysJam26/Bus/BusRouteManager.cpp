@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
+#include "../DataManager.h"
 #include "BusRouteManager.h"
 
 ABusRouteManager::ABusRouteManager()
@@ -14,6 +14,13 @@ ABusRouteManager::ABusRouteManager()
 void ABusRouteManager::StartDeparture()
 {
 	if (!BusReference || CurrentState != ETransitionState::Idle) return;
+
+	if (DataManagerReference)
+	{
+		FString NextName = DataManagerReference->GetStopNameByIndex(CurrentStopIndex);
+
+		BP_UpdateStopScreen(NextName);
+	}
 
 	CurrentState = ETransitionState::Departing;
 	TransitionAlpha = 0.0f;
