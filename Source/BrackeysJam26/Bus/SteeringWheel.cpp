@@ -14,7 +14,6 @@ void ASteeringWheel::BeginPlay()
 
     if (BusToAttachTo)
     {
-        // Attach this wheel to the Bus, keeping its current world position
         FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepWorld, true);
         AttachToActor(BusToAttachTo, AttachmentRules);
     }

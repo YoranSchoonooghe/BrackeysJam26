@@ -15,13 +15,6 @@ void ABusRouteManager::StartDeparture()
 {
 	if (!BusReference || CurrentState != ETransitionState::Idle) return;
 
-	if (DataManagerReference)
-	{
-		FString NextName = DataManagerReference->GetStopNameByIndex(CurrentStopIndex);
-
-		BP_UpdateStopScreen(NextName);
-	}
-
 	CurrentState = ETransitionState::Departing;
 	TransitionAlpha = 0.0f;
 
@@ -33,6 +26,13 @@ void ABusRouteManager::StartDeparture()
 void ABusRouteManager::PerformTeleport()
 {
 	CurrentStopIndex++;
+
+	if (DataManagerReference)
+	{
+		FString NextName = DataManagerReference->GetStopNameByIndex(CurrentStopIndex);
+
+		BP_UpdateStopScreen(NextName);
+	}
 
 	if (TeleportPoints.IsValidIndex(CurrentStopIndex) && FinalStopPoints.IsValidIndex(CurrentStopIndex))
 	{

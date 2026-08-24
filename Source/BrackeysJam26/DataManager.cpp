@@ -58,7 +58,7 @@ FPassengerData ADataManager::GenerateImposterPassport(FPassengerData TrueIdentit
 {
 	FPassengerData ForgedPassport = TrueIdentity;
 
-	int32 DiscrepancyType = FMath::RandRange(1, 3);
+	int DiscrepancyType = FMath::RandRange(1, 3);
 
 	switch (DiscrepancyType)
 	{
@@ -89,7 +89,7 @@ FString ADataManager::GenerateTypo(FString OriginalText)
 	//Swap character with the one next to it
 	if (OriginalText.Len() <= 3) return OriginalText;
 
-	int32 SwapIndex = FMath::RandRange(1, OriginalText.Len() - 2);
+	int SwapIndex = FMath::RandRange(1, OriginalText.Len() - 2);
 
 	TCHAR Temp = OriginalText[SwapIndex];
 	OriginalText[SwapIndex] = OriginalText[SwapIndex + 1];
@@ -102,7 +102,7 @@ FString ADataManager::GetStopNameByIndex(int Index)
 {
 	if (ActiveRoute.IsValidIndex(Index))
 	{
-		return ActiveRoute[Index];
+		return TEXT("Next stop: ") + ActiveRoute[Index];
 	}
 	return TEXT("Final Destination");
 }
@@ -113,15 +113,15 @@ void ADataManager::GenerateActiveRoute()
 
 	TArray<FString> ShuffledStops = BusStopNames;
 
-	for (int32 i = ShuffledStops.Num() - 1; i > 0; i--)
+	for (int i = ShuffledStops.Num() - 1; i > 0; i--)
 	{
-		int32 SwapIndex = FMath::RandRange(0, i);
+		int SwapIndex = FMath::RandRange(0, i);
 		ShuffledStops.Swap(i, SwapIndex);
 	}
 
-	int32 StopsToPick = FMath::Min(NumberOfStops, ShuffledStops.Num());
+	int StopsToPick = FMath::Min(NumberOfStops, ShuffledStops.Num());
 
-	for (int32 i = 0; i < StopsToPick; i++)
+	for (int i = 0; i < StopsToPick; i++)
 	{
 		ActiveRoute.Add(ShuffledStops[i]);
 	}
@@ -131,10 +131,10 @@ TArray<FPassengerRecord> ADataManager::GeneratePassengerQueue(int TotalPassenger
 {
 	TArray<FPassengerRecord> DailyQueue;
 
-	int32 TargetImposters = FMath::RandRange(MinImposters, MaxImposters);
-	int32 CurrentImposters = 0;
+	int TargetImposters = FMath::RandRange(MinImposters, MaxImposters);
+	int CurrentImposters = 0;
 
-	for (int32 i = 0; i < TotalPassengers; i++)
+	for (int i = 0; i < TotalPassengers; i++)
 	{
 		FPassengerRecord NewRecord;
 		NewRecord.TrueIdentity = GenerateRandomPassenger();
@@ -154,9 +154,9 @@ TArray<FPassengerRecord> ADataManager::GeneratePassengerQueue(int TotalPassenger
 		DailyQueue.Add(NewRecord);
 	}
 
-	for (int32 i = DailyQueue.Num() - 1; i > 0; i--)
+	for (int i = DailyQueue.Num() - 1; i > 0; i--)
 	{
-		int32 SwapIndex = FMath::RandRange(0, i);
+		int SwapIndex = FMath::RandRange(0, i);
 		DailyQueue.Swap(i, SwapIndex);
 	}
 
