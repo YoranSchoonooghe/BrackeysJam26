@@ -60,8 +60,22 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Route")
 	void BP_UpdateStopScreen(const FString& NextStopName);
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Timer")
+	float TimeRemaining = 300.f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Timer")
+	float MaxNegativeTime = -120.f;
+
+	UFUNCTION(BlueprintCallable, Category = "Timer")
+	void StartTimer() { bIsTimerActive = true; }
+
+	UFUNCTION(BlueprintCallable, Category = "Timer")
+	FString GetFormattedTimeRemaining();
+
 private:
 	void PerformTeleport();
+
+	void AddStopBonusTime();
 
 	ETransitionState CurrentState;
 
@@ -72,4 +86,6 @@ private:
 	float TransitionDuration;
 
 	float CurrentLoadTime;
+
+	bool bIsTimerActive = false;
 };

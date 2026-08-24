@@ -9,6 +9,8 @@ ABusRouteManager::ABusRouteManager()
 	CurrentStopIndex = 0;
 	CurrentState = ETransitionState::Idle;
 	TransitionDuration = 3.0f;
+
+	StartTimer();
 }
 
 void ABusRouteManager::StartDeparture()
@@ -21,6 +23,19 @@ void ABusRouteManager::StartDeparture()
 	StartLocation = BusReference->GetActorLocation();
 
 	TargetLocation = StartLocation + (BusReference->GetActorRightVector() * 750.0f);
+}
+
+FString ABusRouteManager::GetFormattedTimeRemaining()
+{
+	bool bIsNegative = TimeRemaining < 0.0f;
+
+	float AbsoluteTime = FMath::Abs(TimeRemaining);
+
+	int32 Minutes = FMath::FloorToInt(AbsoluteTime / 60.0f);
+	int32 Seconds = FMath::FloorToInt(FMath::Fmod(AbsoluteTime, 60.0f));
+
+	FString SignString = bIsNegative ? TEXT("-") : TEXT("");
+	return FString::Printf(TEXT("%s%02d:%02d"), *SignString, Minutes, Seconds);
 }
 
 void ABusRouteManager::PerformTeleport()
@@ -45,11 +60,23 @@ void ABusRouteManager::PerformTeleport()
 		TransitionAlpha = 0.0f;
 		CurrentState = ETransitionState::Arriving;
 	}
+
+	AddStopBonusTime();
 }
 
 void ABusRouteManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (bIsTimerActive)
+	{
+		TimeRemaining = FMath::Max(TimeRemaining - DeltaTime, MaxNegativeTime);
+
+		if (TimeRemaining <= MaxNegativeTime)
+		{
+			//Game Over??
+		}
+	}
 
 	if (CurrentState == ETransitionState::Idle || !BusReference) return;
 
@@ -97,4 +124,11 @@ void ABusRouteManager::Tick(float DeltaTime)
 			CurrentState = ETransitionState::Idle;
 		}
 	}
+}
+
+void ABusRouteManager::AddStopBonusTime()
+{
+	float BonusTime = 120.0f;
+
+	TimeRemaining += BonusTime;
 }
