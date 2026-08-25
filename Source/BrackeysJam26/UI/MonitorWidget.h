@@ -12,7 +12,8 @@ UENUM(BlueprintType)
 enum class EMonitorScreen : uint8
 {
 	Empty,
-	RequestPermission
+	RequestPermission,
+	CameraView
 };
 
 UCLASS()
