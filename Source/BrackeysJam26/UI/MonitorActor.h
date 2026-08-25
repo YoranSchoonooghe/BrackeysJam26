@@ -29,7 +29,13 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Camera")
 	void BlendToPlayerCamera();
 
+	UFUNCTION(BlueprintCallable, Category = "Monitor")
+	void Close();
+
 	virtual void Interact_Implementation() override;
+
+private:
+	void SetSeatButtonsVisible(bool bVisible);
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")

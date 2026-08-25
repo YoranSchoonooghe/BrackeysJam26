@@ -6,6 +6,8 @@
 #include "Camera/CameraActor.h"
 #include "Kismet/GameplayStatics.h"
 #include "BrackeysJam26/Character/PlayerCharacter.h"
+#include "BrackeysJam26/Bus/Bus.h"
+#include "BrackeysJam26/Bus/BusSeat.h"
 
 AMonitorActor::AMonitorActor()
 {
@@ -38,17 +40,35 @@ void AMonitorActor::BlendToTargetCamera()
 {
 	if (!TargetCamera) return;
 
-	if (APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0))
+	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	if (!PC) return;
+
+	PC->SetViewTargetWithBlend(TargetCamera, CameraBlendTime);
+
+	if (auto* PlayerCharacter = Cast<APlayerCharacter>(PC->GetPawn()))
 	{
-		PC->SetViewTargetWithBlend(TargetCamera, CameraBlendTime);
+		PlayerCharacter->SetInputLocked(true);
 	}
+
+	SetSeatButtonsVisible(true);
 }
 
 void AMonitorActor::BlendToPlayerCamera()
 {
-	if (APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0))
+	Close();
+}
+
+void AMonitorActor::SetSeatButtonsVisible(bool bVisible)
+{
+	auto* Bus = Cast<ABus>(UGameplayStatics::GetActorOfClass(GetWorld(), ABus::StaticClass()));
+	if (!Bus) return;
+
+	for (ABusSeat* Seat : Bus->GetSeats())
 	{
-		PC->SetViewTargetWithBlend(PC->GetPawn(), CameraBlendTime);
+		if (Seat)
+		{
+			Seat->SetButtonVisible(bVisible);
+		}
 	}
 }
 
@@ -57,24 +77,41 @@ void AMonitorActor::Interact_Implementation()
 	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	if (!PC) return;
 
-	auto* PlayerCharacter = Cast<APlayerCharacter>(PC->GetPawn());
+	if (PC->GetViewTarget() == this)
+	{
+		Close();
+		return;
+	}
+
+	PC->SetViewTargetWithBlend(this, FocusBlendTime);
+
+	if (auto* PlayerCharacter = Cast<APlayerCharacter>(PC->GetPawn()))
+	{
+		PlayerCharacter->SetInputLocked(true);
+	}
+
+	ScreenWidgetComponent->SetVisibility(true);
+}
+
+void AMonitorActor::Close()
+{
+	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	if (!PC) return;
 
 	if (PC->GetViewTarget() == this)
 	{
 		PC->SetViewTargetWithBlend(PC->GetPawn(), FocusBlendTime);
-		if (PlayerCharacter)
+		ScreenWidgetComponent->SetVisibility(false);
+
+		if (auto* PlayerCharacter = Cast<APlayerCharacter>(PC->GetPawn()))
 		{
 			PlayerCharacter->SetInputLocked(false);
 		}
-		ScreenWidgetComponent->SetVisibility(false);
 	}
 	else
 	{
 		PC->SetViewTargetWithBlend(this, FocusBlendTime);
-		if (PlayerCharacter)
-		{
-			PlayerCharacter->SetInputLocked(true);
-		}
+		SetSeatButtonsVisible(false);
 		ScreenWidgetComponent->SetVisibility(true);
 	}
 }

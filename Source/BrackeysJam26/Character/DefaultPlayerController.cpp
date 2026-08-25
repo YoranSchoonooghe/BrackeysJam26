@@ -60,6 +60,11 @@ void ADefaultPlayerController::OnPossess(APawn* InPawn)
 	{
 		PermissionWidgetInstance = CreateWidget<UPermissionWidget>(this, PermissionWidgetClass);
 	}
+
+	if (CloseButtonWidgetClass)
+	{
+		CloseButtonWidgetInstance = CreateWidget<UUserWidget>(this, CloseButtonWidgetClass);
+	}
 }
 
 void ADefaultPlayerController::OnUnPossess()
@@ -82,6 +87,20 @@ void ADefaultPlayerController::HidePermissionWidget()
 	if (!PermissionWidgetInstance) return;
 
 	PermissionWidgetInstance->RemoveFromParent();
+}
+
+void ADefaultPlayerController::ShowCloseButtonWidget()
+{
+	if (!CloseButtonWidgetInstance) return;
+
+	CloseButtonWidgetInstance->AddToViewport();
+}
+
+void ADefaultPlayerController::HideCloseButtonWidget()
+{
+	if (!CloseButtonWidgetInstance) return;
+
+	CloseButtonWidgetInstance->RemoveFromParent();
 }
 
 void ADefaultPlayerController::ShowMonitorScreen(EMonitorScreen Screen)

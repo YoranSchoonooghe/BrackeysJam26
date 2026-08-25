@@ -5,13 +5,14 @@
 #include "BusSeat.generated.h"
 
 class ANPCCharacter;
+class UWidgetComponent;
 
 UCLASS()
 class BRACKEYSJAM26_API ABusSeat : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	ABusSeat();
 
 protected:
@@ -20,7 +21,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Seat")
 	float EjectionForce{ 20000.0f };
 
-public:	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	TObjectPtr<UWidgetComponent> EjectButtonWidget;
+
+public:
 	//virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Seat")
@@ -31,6 +35,9 @@ public:
 	void Eject();
 	UFUNCTION(BlueprintCallable, Category = "Seat")
 	bool IsOccupied() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Seat")
+	void SetButtonVisible(bool bVisible);
 
 private:
 	ANPCCharacter* Occupant;

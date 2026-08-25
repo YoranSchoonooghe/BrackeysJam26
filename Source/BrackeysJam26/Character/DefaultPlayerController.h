@@ -42,9 +42,15 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
 	TSubclassOf<UUserWidget> PermissionWidgetClass;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
+	TSubclassOf<UUserWidget> CloseButtonWidgetClass;
+
 public:
 	void ShowPermissionWidget(ANPCCharacter* NPC);
 	void HidePermissionWidget();
+
+	void ShowCloseButtonWidget();
+	void HideCloseButtonWidget();
 
 	UFUNCTION(BlueprintCallable, Category = "Monitor")
 	void ShowMonitorScreen(EMonitorScreen Screen);
@@ -60,6 +66,9 @@ private:
 
 	UPROPERTY()
 	TObjectPtr<UUserWidget> PermissionWidgetInstance;
+
+	UPROPERTY()
+	TObjectPtr<UUserWidget> CloseButtonWidgetInstance;
 
 	UPROPERTY()
 	TObjectPtr<AMonitorActor> CachedMonitor;

@@ -33,6 +33,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
 	float InteractRange{ 250.0f };
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
+	float FocusedInteractionDistance{ 5000.0f };
+
 public:	
 	//virtual void Tick(float DeltaTime) override;
 

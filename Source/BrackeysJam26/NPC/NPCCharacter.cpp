@@ -57,6 +57,8 @@ void ANPCCharacter::AssignSeat()
 	auto* Seat = Bus->GetAvailableSeat();
 	if (!Seat) return;
 
+	Seat->Occupy(this);
+
 	if (auto* AIController = Cast<AAIController>(GetController()))
 	{
 		if (auto* BlackboardComponent = AIController->GetBlackboardComponent())
@@ -66,9 +68,9 @@ void ANPCCharacter::AssignSeat()
 	}
 }
 
-void ANPCCharacter::Eject(float Force)
+bool ANPCCharacter::Eject(float Force)
 {
-	if (NPCState != ENPCState::Sitting) return;
+	if (NPCState != ENPCState::Sitting) return false;
 
 	if (CurrentSeat)
 	{
@@ -92,4 +94,6 @@ void ANPCCharacter::Eject(float Force)
 
 		MeshComp->WakeAllRigidBodies();
 	}
+
+	return true;
 }

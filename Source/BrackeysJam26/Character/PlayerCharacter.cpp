@@ -2,8 +2,10 @@
 #include "Camera/CameraComponent.h"
 #include "Components/WidgetInteractionComponent.h"
 #include "GameFramework/PlayerController.h"
+#include "Engine/EngineBaseTypes.h"
 #include "../InteractableInterface.h"
 #include "BrackeysJam26/NPC/NPCCharacter.h"
+#include "BrackeysJam26/Character/DefaultPlayerController.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -77,10 +79,23 @@ void APlayerCharacter::Look(const FVector2D& Value)
 
 void APlayerCharacter::Interact()
 {
-	if (bInputLocked && WidgetInteraction && WidgetInteraction->IsOverInteractableWidget())
+	if (bInputLocked)
 	{
-		WidgetInteraction->PressPointerKey(EKeys::LeftMouseButton);
-		WidgetInteraction->ReleasePointerKey(EKeys::LeftMouseButton);
+		if (!WidgetInteraction) return;
+
+		if (WidgetInteraction->IsOverInteractableWidget())
+		{
+			WidgetInteraction->PressPointerKey(EKeys::LeftMouseButton);
+			WidgetInteraction->ReleasePointerKey(EKeys::LeftMouseButton);
+			return;
+		}
+
+		AActor* HitActor = WidgetInteraction->GetLastHitResult().GetActor();
+		if (HitActor && HitActor->Implements<UInteractableInterface>())
+		{
+			IInteractableInterface::Execute_Interact(HitActor);
+		}
+
 		return;
 	}
 
@@ -115,14 +130,30 @@ void APlayerCharacter::SetInputLocked(bool bLocked)
 {
 	bInputLocked = bLocked;
 
-	if (APlayerController* PC = Cast<APlayerController>(Controller))
+	if (auto* PC = Cast<ADefaultPlayerController>(Controller))
 	{
 		PC->SetShowMouseCursor(bLocked);
+
+		if (bLocked)
+		{
+			FInputModeGameAndUI InputMode;
+			InputMode.SetHideCursorDuringCapture(false);
+			InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+			PC->SetInputMode(InputMode);
+
+			PC->ShowCloseButtonWidget();
+		}
+		else
+		{
+			PC->SetInputMode(FInputModeGameOnly());
+			PC->HideCloseButtonWidget();
+		}
 	}
 
 	if (WidgetInteraction)
 	{
 		WidgetInteraction->InteractionSource = bLocked ? EWidgetInteractionSource::Mouse : EWidgetInteractionSource::CenterScreen;
+		WidgetInteraction->InteractionDistance = bLocked ? FocusedInteractionDistance : InteractRange;
 	}
 }
 

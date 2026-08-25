@@ -37,7 +37,7 @@ public:
 	ENPCState GetState() const { return NPCState; }
 
 	UFUNCTION()
-	void Eject(float Force);
+	bool Eject(float Force);
 
 	UFUNCTION()
 	void SetCurrentSeat(ABusSeat* Seat) { CurrentSeat = Seat; }

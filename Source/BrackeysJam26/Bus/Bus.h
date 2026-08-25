@@ -46,4 +46,6 @@ public:
 	FVector GetExitLocation() const;
 	UFUNCTION()
 	ABusSeat* GetAvailableSeat() const;
+
+	const TArray<ABusSeat*>& GetSeats() const { return Seats; }
 };
