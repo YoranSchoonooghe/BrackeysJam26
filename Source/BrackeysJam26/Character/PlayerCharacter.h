@@ -44,6 +44,9 @@ public:
 	void SetTargetNPC(ANPCCharacter* NPCCharacter);
 	ANPCCharacter* GetTargetNPC() const { return TargetNPC; }
 
+	UFUNCTION(BlueprintCallable, Category = "Interaction")
+	void SetInputLocked(bool bLocked);
+
 	UFUNCTION(BlueprintImplementableEvent, Category = "Interaction")
 	void OnInteractHit(AActor* HitActor);
 
@@ -54,5 +57,7 @@ private:
 	float InitialControlPitch{ 0.0f };
 
 	ANPCCharacter* TargetNPC;
+
+	bool bInputLocked{ false };
 
 };

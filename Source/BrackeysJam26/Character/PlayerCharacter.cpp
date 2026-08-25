@@ -1,6 +1,7 @@
 #include "PlayerCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "Components/WidgetInteractionComponent.h"
+#include "GameFramework/PlayerController.h"
 #include "../InteractableInterface.h"
 #include "BrackeysJam26/NPC/NPCCharacter.h"
 
@@ -15,7 +16,7 @@ APlayerCharacter::APlayerCharacter()
 
 	WidgetInteraction = CreateDefaultSubobject<UWidgetInteractionComponent>(TEXT("WidgetInteraction"));
 	WidgetInteraction->SetupAttachment(FollowCamera);
-	WidgetInteraction->InteractionSource = EWidgetInteractionSource::World;
+	WidgetInteraction->InteractionSource = EWidgetInteractionSource::CenterScreen;
 
 	GetMesh()->SetOwnerNoSee(true);
 }
@@ -46,7 +47,7 @@ void APlayerCharacter::BeginPlay()
 
 void APlayerCharacter::Move(const FVector2D& Value)
 {
-	if (!Controller) return;
+	if (!Controller || bInputLocked) return;
 
 	const FRotator Rotation = Controller->GetControlRotation();
 
@@ -66,7 +67,7 @@ void APlayerCharacter::Jump()
 
 void APlayerCharacter::Look(const FVector2D& Value)
 {
-	if (!Controller) return;
+	if (!Controller || bInputLocked) return;
 
 	AddControllerYawInput(Value.X);
 	AddControllerPitchInput(-Value.Y);
@@ -76,7 +77,7 @@ void APlayerCharacter::Look(const FVector2D& Value)
 
 void APlayerCharacter::Interact()
 {
-	if (WidgetInteraction && WidgetInteraction->IsOverInteractableWidget())
+	if (bInputLocked && WidgetInteraction && WidgetInteraction->IsOverInteractableWidget())
 	{
 		WidgetInteraction->PressPointerKey(EKeys::LeftMouseButton);
 		WidgetInteraction->ReleasePointerKey(EKeys::LeftMouseButton);
@@ -108,6 +109,21 @@ void APlayerCharacter::SetTargetNPC(ANPCCharacter* NPCCharacter)
 	if (!NPCCharacter || TargetNPC == NPCCharacter) return;
 
 	TargetNPC = NPCCharacter;
+}
+
+void APlayerCharacter::SetInputLocked(bool bLocked)
+{
+	bInputLocked = bLocked;
+
+	if (APlayerController* PC = Cast<APlayerController>(Controller))
+	{
+		PC->SetShowMouseCursor(bLocked);
+	}
+
+	if (WidgetInteraction)
+	{
+		WidgetInteraction->InteractionSource = bLocked ? EWidgetInteractionSource::Mouse : EWidgetInteractionSource::CenterScreen;
+	}
 }
 
 void APlayerCharacter::ClampLookAngle()
