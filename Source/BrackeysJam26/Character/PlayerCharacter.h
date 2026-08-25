@@ -7,6 +7,7 @@
 class UCameraComponent;
 class ANPCCharacter;
 class UWidgetInteractionComponent;
+class UInspectionComponent;
 
 UCLASS()
 class BRACKEYSJAM26_API APlayerCharacter : public ACharacter
@@ -21,9 +22,12 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<UCameraComponent> FollowCamera;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<UWidgetInteractionComponent> WidgetInteraction;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	TObjectPtr<UArrowComponent> InspectionAnchor;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	TObjectPtr<UInspectionComponent> Inspection;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
 	float MaxLookYaw{ 90.0f };
@@ -43,6 +47,7 @@ public:
 	virtual void Jump() override;
 	void Look(const FVector2D& Value);
 	void Interact();
+	void RotateItem(const FVector2D& Value);
 
 	void SetTargetNPC(ANPCCharacter* NPCCharacter);
 	ANPCCharacter* GetTargetNPC() const { return TargetNPC; }
@@ -52,6 +57,8 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Interaction")
 	void OnInteractHit(AActor* HitActor);
+
+	FTransform GetInspectionAnchor() const;
 
 private:
 	void ClampLookAngle();

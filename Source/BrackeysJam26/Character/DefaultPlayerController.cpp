@@ -53,7 +53,10 @@ void ADefaultPlayerController::SetupInputComponent()
 			EIC->BindAction(JumpAction, ETriggerEvent::Started, this, &ADefaultPlayerController::Jump);
 
 		if (LookAction)
+		{
 			EIC->BindAction(LookAction, ETriggerEvent::Triggered, this, &ADefaultPlayerController::Look);
+			EIC->BindAction(LookAction, ETriggerEvent::Triggered, this, &ADefaultPlayerController::RotateItem);
+		}
 
 		if (InteractAction)
 			EIC->BindAction(InteractAction, ETriggerEvent::Started, this, &ADefaultPlayerController::Interact);
@@ -165,4 +168,14 @@ void ADefaultPlayerController::RequestPause()
 	{
 		Flow->RequestBack();
 	}
+}
+
+void ADefaultPlayerController::RotateItem(const FInputActionValue& Value)
+{
+	if (!CachedPlayerCharacter) return;
+
+	FVector2D CameraMovementVector = Value.Get<FVector2D>();
+	if (CameraMovementVector.Length() < 0.1f) return;
+
+	CachedPlayerCharacter->RotateItem(CameraMovementVector);
 }

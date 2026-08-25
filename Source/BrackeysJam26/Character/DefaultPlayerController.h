@@ -68,6 +68,7 @@ private:
 	void Look(const FInputActionValue& Value);
 	void Interact();
 	void RequestPause();
+	void RotateItem(const FInputActionValue& Value);
 
 	UPROPERTY()
 	TObjectPtr<APlayerCharacter> CachedPlayerCharacter;

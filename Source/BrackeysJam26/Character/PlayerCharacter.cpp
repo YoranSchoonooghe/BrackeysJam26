@@ -4,8 +4,11 @@
 #include "GameFramework/PlayerController.h"
 #include "Engine/EngineBaseTypes.h"
 #include "../InteractableInterface.h"
+#include "../InspectableInterface.h"
 #include "BrackeysJam26/NPC/NPCCharacter.h"
 #include "BrackeysJam26/Character/DefaultPlayerController.h"
+#include "Components/ArrowComponent.h"
+#include "BrackeysJam26/Components/InspectionComponent.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -21,6 +24,12 @@ APlayerCharacter::APlayerCharacter()
 	WidgetInteraction->InteractionSource = EWidgetInteractionSource::CenterScreen;
 
 	GetMesh()->SetOwnerNoSee(true);
+
+	InspectionAnchor = CreateDefaultSubobject<UArrowComponent>(TEXT("InspectionAnchor"));
+	InspectionAnchor->SetupAttachment(FollowCamera);
+	InspectionAnchor->SetRelativeLocation(FVector(150.0f, 0.0f, 0.0f));
+
+	Inspection = CreateDefaultSubobject<UInspectionComponent>(TEXT("Inspection"));
 }
 
 void APlayerCharacter::BeginPlay()
@@ -116,7 +125,21 @@ void APlayerCharacter::Interact()
 		{
 			IInteractableInterface::Execute_Interact(HitResult.GetActor());
 		}
+		else if (HitResult.GetActor()->Implements<UInspectableInterface>())
+		{
+			if (Inspection->IsInspecting()) return;
+
+			Inspection->StartInspecting(HitResult.GetActor());
+			SetInputLocked(true);
+		}
 	}
+}
+
+void APlayerCharacter::RotateItem(const FVector2D& Value)
+{
+	if (!bInputLocked || !Inspection) return;
+
+	Inspection->Rotate(Value, FollowCamera->GetRightVector(), FollowCamera->GetUpVector());
 }
 
 void APlayerCharacter::SetTargetNPC(ANPCCharacter* NPCCharacter)
@@ -155,6 +178,11 @@ void APlayerCharacter::SetInputLocked(bool bLocked)
 		WidgetInteraction->InteractionSource = bLocked ? EWidgetInteractionSource::Mouse : EWidgetInteractionSource::CenterScreen;
 		WidgetInteraction->InteractionDistance = bLocked ? FocusedInteractionDistance : InteractRange;
 	}
+}
+
+FTransform APlayerCharacter::GetInspectionAnchor() const
+{
+	return InspectionAnchor->GetComponentTransform();
 }
 
 void APlayerCharacter::ClampLookAngle()
