@@ -1,5 +1,6 @@
 #include "InspectionComponent.h"
 #include "BrackeysJam26/Character/PlayerCharacter.h"
+#include "Camera/CameraComponent.h"
 
 UInspectionComponent::UInspectionComponent()
 {
@@ -57,6 +58,8 @@ void UInspectionComponent::StartInspecting(AActor* Actor)
     bIsInspecting = true;
     ElapsedAnimationTime = 0.0f;
     bIsInspectAnimationPlaying = true;
+
+    BlurBackground();
 }
 
 void UInspectionComponent::StopInspecting()
@@ -67,6 +70,7 @@ void UInspectionComponent::StopInspecting()
     OriginalActor->SetActorHiddenInGame(false);
     InspectionActor->Destroy();
     bIsInspecting = false;
+    ResetBackground();
 
     player->SetInputLocked(false);
 }
@@ -109,5 +113,34 @@ void UInspectionComponent::UpdateInspectAnimation(float DeltaTime)
         InspectionActor->SetActorTransform(TargetTransform);
         bIsInspectAnimationPlaying = false;
     }
+}
+
+void UInspectionComponent::BlurBackground()
+{
+    auto player = Cast<APlayerCharacter>(GetOwner());
+    if (!player) return;
+
+    auto* camera = player->GetCamera();
+    if (!camera) return;
+
+    camera->PostProcessSettings.bOverride_DepthOfFieldFstop = true;
+    camera->PostProcessSettings.bOverride_DepthOfFieldSensorWidth = true;
+    camera->PostProcessSettings.bOverride_DepthOfFieldFocalDistance = true;
+    camera->PostProcessSettings.DepthOfFieldFstop = Aperture;
+    camera->PostProcessSettings.DepthOfFieldSensorWidth = DOFSensorWidth;
+    camera->PostProcessSettings.DepthOfFieldFocalDistance = DOFFocalDistance;
+}
+
+void UInspectionComponent::ResetBackground()
+{
+    auto player = Cast<APlayerCharacter>(GetOwner());
+    if (!player) return;
+
+    auto* camera = player->GetCamera();
+    if (!camera) return;
+
+    camera->PostProcessSettings.bOverride_DepthOfFieldFstop = false;
+    camera->PostProcessSettings.bOverride_DepthOfFieldSensorWidth = false;
+    camera->PostProcessSettings.bOverride_DepthOfFieldFocalDistance = false;
 }
 

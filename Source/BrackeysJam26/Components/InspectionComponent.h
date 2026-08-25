@@ -24,6 +24,13 @@ protected:
 	float AnimationDuration{ 0.5f };
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inspection")
 	float RotationSpeed{ 1.0f };
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inspection|Blur")
+	float Aperture{ 32.0f };
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inspection|Blur")
+	float DOFSensorWidth{ 300.0f };
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inspection|Blur")
+	float DOFFocalDistance{ 40.0f };
+
 
 public:	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -39,6 +46,8 @@ public:
 
 private:
 	void UpdateInspectAnimation(float DeltaTime);
+	void BlurBackground();
+	void ResetBackground();
 
 	UPROPERTY()
 	TObjectPtr<AActor> OriginalActor;

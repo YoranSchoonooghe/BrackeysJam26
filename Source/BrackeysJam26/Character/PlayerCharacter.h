@@ -59,6 +59,7 @@ public:
 	void OnInteractHit(AActor* HitActor);
 
 	FTransform GetInspectionAnchor() const;
+	UCameraComponent* GetCamera() const { return FollowCamera; }
 
 private:
 	void ClampLookAngle();
