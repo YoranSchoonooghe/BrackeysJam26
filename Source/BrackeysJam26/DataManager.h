@@ -21,7 +21,22 @@ struct FPassengerData
 	FString IDNumber;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FString Species;
+	FString DOB;
+};
+
+USTRUCT(BlueprintType)
+struct FTicketData
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString BoardingStop;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString FinalStop;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString TicketDate;
 };
 
 USTRUCT(BlueprintType)
@@ -34,6 +49,9 @@ struct FPassengerRecord
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FPassengerData PresentedPassport;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FTicketData PresentedTicket;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsImposter = false;
@@ -61,9 +79,6 @@ public:
 	TArray<FString> IDNumbers;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Data|Lists")
-	TArray<FString> SpeciesList;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Data|Lists")
 	TArray<FString> BusStopNames;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Data|Lists")
@@ -71,6 +86,12 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Data|Lists")
 	int NumberOfStops = 5;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Date")
+	FString CurrentGameDate;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Progression")
+	int32 CurrentDay = 1;
 
 
 	UFUNCTION(BlueprintCallable, Category = "Data|Generation")
@@ -80,13 +101,19 @@ public:
 	FPassengerData GenerateImposterPassport(FPassengerData TrueIdentity);
 
 	UFUNCTION(BlueprintCallable, Category = "Data|Generation")
-	FString GetStopNameByIndex(int Index);
+	FString GetStopNameByIndex(int32 Index);
 
 	UFUNCTION(BlueprintCallable, Category = "Data|Generation")
 	void GenerateActiveRoute();
 
 	UFUNCTION(BlueprintCallable, Category = "Data|Generation")
-	TArray<FPassengerRecord> GeneratePassengerQueue(int TotalPassengers, int MinImposters, int MaxImposters);
+	TArray<FPassengerRecord> GeneratePassengerQueue(int32 TotalPassengers, int32 MinImposters, int32 MaxImposters);
+
+	UFUNCTION(BlueprintCallable, Category = "Data|Generation")
+	FTicketData GenerateValidTicket();
+
+	UFUNCTION(BlueprintCallable, Category = "Data|Generation")
+	FTicketData GenerateFakeTicket(FTicketData ValidTicket);
 
 private:
 	FString GenerateTypo(FString OriginalText);

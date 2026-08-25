@@ -12,7 +12,7 @@
 
 APlayerCharacter::APlayerCharacter()
 {
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(RootComponent);
@@ -50,11 +50,46 @@ void APlayerCharacter::BeginPlay()
 	}
 }
 
-//void APlayerCharacter::Tick(float DeltaTime)
-//{
-//	Super::Tick(DeltaTime);
-//
-//}
+void APlayerCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (bInputLocked || !FollowCamera || bIsLoading)
+	{
+		OnUpdateInteractionPrompt(FText::GetEmpty());
+		return;
+	}
+
+	FVector Start = FollowCamera->GetComponentLocation();
+	FVector End = Start + (FollowCamera->GetForwardVector() * InteractRange);
+
+	FHitResult HitResult;
+	FCollisionQueryParams CollisionParams;
+	CollisionParams.AddIgnoredActor(this);
+
+	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, CollisionParams);
+
+	if (bHit && HitResult.GetActor())
+	{
+		if (HitResult.GetActor()->Implements<UInteractableInterface>())
+		{
+			FText Prompt = IInteractableInterface::Execute_GetPromptText(HitResult.GetActor());
+			OnUpdateInteractionPrompt(Prompt);
+		}
+		else if (HitResult.GetActor()->Implements<UInspectableInterface>())
+		{
+			OnUpdateInteractionPrompt(FText::FromString("Click to Inspect"));
+		}
+		else
+		{
+			OnUpdateInteractionPrompt(FText::GetEmpty());
+		}
+	}
+	else
+	{
+		OnUpdateInteractionPrompt(FText::GetEmpty());
+	}
+}
 
 void APlayerCharacter::Move(const FVector2D& Value)
 {
@@ -88,6 +123,8 @@ void APlayerCharacter::Look(const FVector2D& Value)
 
 void APlayerCharacter::Interact()
 {
+	if (bIsLoading) return;
+
 	if (bInputLocked)
 	{
 		if (!WidgetInteraction) return;
@@ -184,6 +221,13 @@ void APlayerCharacter::SetInputLocked(bool bLocked)
 FTransform APlayerCharacter::GetInspectionAnchor() const
 {
 	return InspectionAnchor->GetComponentTransform();
+}
+
+void APlayerCharacter::SetLoadingState(bool bNewLoadingState)
+{
+	bIsLoading = bNewLoadingState;
+
+	ToggleHUDVisibility(!bIsLoading);
 }
 
 void APlayerCharacter::ClampLookAngle()

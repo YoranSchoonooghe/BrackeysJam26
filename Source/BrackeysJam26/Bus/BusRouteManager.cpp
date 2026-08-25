@@ -3,6 +3,8 @@
 #include "BusRouteManager.h"
 #include "../DataManager.h"
 #include "../Components/BusQueueComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "BrackeysJam26/Character/PlayerCharacter.h"
 
 ABusRouteManager::ABusRouteManager()
 {
@@ -24,6 +26,11 @@ void ABusRouteManager::StartDeparture()
 	StartLocation = BusReference->GetActorLocation();
 
 	TargetLocation = StartLocation + (BusReference->GetActorRightVector() * 750.0f);
+
+	if (APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)))
+	{
+		Player->SetLoadingState(true);
+	}
 }
 
 FString ABusRouteManager::GetFormattedTimeRemaining()
@@ -128,6 +135,11 @@ void ABusRouteManager::Tick(float DeltaTime)
 		if (ClampedAlpha >= 1.0f)
 		{
 			CurrentState = ETransitionState::Idle;
+
+			if (APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)))
+			{
+				Player->SetLoadingState(false);
+			}
 		}
 	}
 }

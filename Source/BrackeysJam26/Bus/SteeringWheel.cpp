@@ -26,3 +26,8 @@ void ASteeringWheel::Interact_Implementation()
 		RouteManager->StartDeparture();
 	}
 }
+
+FText ASteeringWheel::GetPromptText_Implementation()
+{
+    return FText::FromString("Drive to next stop");
+}

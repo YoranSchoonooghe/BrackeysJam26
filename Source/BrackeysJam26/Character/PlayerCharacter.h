@@ -41,7 +41,7 @@ protected:
 	float FocusedInteractionDistance{ 5000.0f };
 
 public:	
-	//virtual void Tick(float DeltaTime) override;
+	virtual void Tick(float DeltaTime) override;
 
 	void Move(const FVector2D& Value);
 	virtual void Jump() override;
@@ -58,8 +58,20 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Interaction")
 	void OnInteractHit(AActor* HitActor);
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "UI")
+	void OnUpdateInteractionPrompt(const FText& PromptMessage);
+
 	FTransform GetInspectionAnchor() const;
 	UCameraComponent* GetCamera() const { return FollowCamera; }
+
+	UPROPERTY(BlueprintReadWrite, Category = "State")
+	bool bIsLoading = false;
+
+	UFUNCTION(BlueprintCallable, Category = "State")
+	void SetLoadingState(bool bNewLoadingState);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "UI")
+	void ToggleHUDVisibility(bool bIsVisible);
 
 private:
 	void ClampLookAngle();

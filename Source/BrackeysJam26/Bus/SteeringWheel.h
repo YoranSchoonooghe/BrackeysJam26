@@ -26,4 +26,6 @@ public:
 	AActor* BusToAttachTo;
 
 	virtual void Interact_Implementation() override;
+
+	virtual FText GetPromptText_Implementation() override;
 };
