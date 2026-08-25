@@ -3,7 +3,10 @@
 #include "BrackeysJam26/Components/SplineFollowComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "BrackeysJam26/Bus/Bus.h"
+#include "BrackeysJam26/Bus/BusSeat.h"
 #include "BrackeysJam26/Components/BusQueueComponent.h"
+#include "AIController.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include <Kismet/GameplayStatics.h>
 
 ANPCCharacter::ANPCCharacter()
@@ -31,6 +34,11 @@ void ANPCCharacter::ChangeState(ENPCState NewState)
 
 	NPCState = NewState;
 
+	if (NPCState == ENPCState::WalkToSeat)
+	{
+		AssignSeat();
+	}
+
 	if (NPCState == ENPCState::ExitBus || NPCState == ENPCState::WalkToSeat)
 	{
 		auto* Bus = Cast<ABus>(UGameplayStatics::GetActorOfClass(GetWorld(), ABus::StaticClass()));
@@ -41,9 +49,32 @@ void ANPCCharacter::ChangeState(ENPCState NewState)
 	}
 }
 
+void ANPCCharacter::AssignSeat()
+{
+	auto* Bus = Cast<ABus>(UGameplayStatics::GetActorOfClass(GetWorld(), ABus::StaticClass()));
+	if (!Bus) return;
+
+	auto* Seat = Bus->GetAvailableSeat();
+	if (!Seat) return;
+
+	if (auto* AIController = Cast<AAIController>(GetController()))
+	{
+		if (auto* BlackboardComponent = AIController->GetBlackboardComponent())
+		{
+			BlackboardComponent->SetValueAsObject(TEXT("TargetSeat"), Seat);
+		}
+	}
+}
+
 void ANPCCharacter::Eject(float Force)
 {
 	if (NPCState != ENPCState::Sitting) return;
+
+	if (CurrentSeat)
+	{
+		CurrentSeat->Leave();
+		CurrentSeat = nullptr;
+	}
 
 	const FVector launchDirection = FMath::VRandCone(FVector::UpVector, FMath::DegreesToRadians(20.0f));
 

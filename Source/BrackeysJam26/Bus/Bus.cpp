@@ -49,8 +49,14 @@ FVector ABus::GetExitLocation() const
 
 ABusSeat* ABus::GetAvailableSeat() const
 {
-	if (Seats.IsEmpty()) return nullptr;
+	for (ABusSeat* Seat : Seats)
+	{
+		if (Seat && !Seat->IsOccupied())
+		{
+			return Seat;
+		}
+	}
 
-	return Seats[0];
+	return nullptr;
 }
 

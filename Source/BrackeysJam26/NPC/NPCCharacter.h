@@ -4,6 +4,8 @@
 #include "GameFramework/Character.h"
 #include "NPCCharacter.generated.h"
 
+class ABusSeat;
+
 UENUM(BlueprintType)
 enum class ENPCState : uint8
 {
@@ -37,6 +39,14 @@ public:
 	UFUNCTION()
 	void Eject(float Force);
 
+	UFUNCTION()
+	void SetCurrentSeat(ABusSeat* Seat) { CurrentSeat = Seat; }
+
 private:
+	void AssignSeat();
+
 	ENPCState NPCState{ ENPCState::Wait };
+
+	UPROPERTY()
+	TObjectPtr<ABusSeat> CurrentSeat;
 };

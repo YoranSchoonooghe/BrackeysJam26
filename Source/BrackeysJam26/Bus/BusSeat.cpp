@@ -25,13 +25,13 @@ void ABusSeat::Occupy(ANPCCharacter* NPCCharacter)
 	if (!NPCCharacter) return;
 
 	Occupant = NPCCharacter;
+	Occupant->SetCurrentSeat(this);
 }
 
 void ABusSeat::Leave()
 {
 	if (!IsOccupied()) return;
 
-	//Occupant->Leave()
 	Occupant = nullptr;
 }
 
@@ -40,7 +40,6 @@ void ABusSeat::Eject()
 	if (!IsOccupied()) return;
 
 	Occupant->Eject(EjectionForce);
-	Occupant = nullptr;
 }
 
 bool ABusSeat::IsOccupied() const
