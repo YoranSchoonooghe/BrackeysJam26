@@ -50,6 +50,7 @@ void UInspectionComponent::StartInspecting(AActor* Actor)
 
     if (!InspectionActor) return;
 
+    InspectionActor->SetActorEnableCollision(false);
     OriginalActor->SetActorHiddenInGame(true);
     StartTransform = inspectionTransform;
     TargetTransform = StartTransform;
