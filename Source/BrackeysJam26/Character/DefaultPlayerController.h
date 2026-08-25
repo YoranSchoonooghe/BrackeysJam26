@@ -10,6 +10,7 @@ class UInputMappingContext;
 class UInputAction;
 class APlayerCharacter;
 class ANPCCharacter;
+class UMenuStateBase;
 
 UCLASS()
 class BRACKEYSJAM26_API ADefaultPlayerController : public APlayerController
@@ -39,11 +40,17 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Input|Actions")
 	TObjectPtr<UInputAction> InteractAction;
 
+	UPROPERTY(EditAnywhere, Category = "Input|Actions")
+	TObjectPtr<UInputAction> PauseAction;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
 	TSubclassOf<UUserWidget> PermissionWidgetClass;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
 	TSubclassOf<UUserWidget> CloseButtonWidgetClass;
+
+	UPROPERTY(EditAnywhere, Category = "Menu")
+	TSubclassOf<UMenuStateBase> DefaultRootMenuState;
 
 public:
 	void ShowPermissionWidget(ANPCCharacter* NPC);
@@ -60,6 +67,7 @@ private:
 	void Jump();
 	void Look(const FInputActionValue& Value);
 	void Interact();
+	void RequestPause();
 
 	UPROPERTY()
 	TObjectPtr<APlayerCharacter> CachedPlayerCharacter;

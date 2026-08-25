@@ -4,6 +4,8 @@
 #include "PlayerCharacter.h"
 #include "Blueprint/UserWidget.h"
 #include "BrackeysJam26/HUD/PermissionWidget.h"
+#include "BrackeysJam26/HUD/MenuFlowSubsystem.h"
+#include "BrackeysJam26/HUD/MenuStateBase.h"
 #include "BrackeysJam26/NPC/NPCCharacter.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -17,6 +19,14 @@ void ADefaultPlayerController::BeginPlay()
 	Super::BeginPlay();
 
 	CachedMonitor = Cast<AMonitorActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AMonitorActor::StaticClass()));
+
+	if (DefaultRootMenuState)
+	{
+		if (UMenuFlowSubsystem* Flow = GetGameInstance() ? GetGameInstance()->GetSubsystem<UMenuFlowSubsystem>() : nullptr)
+		{
+			Flow->SetRootState(DefaultRootMenuState);
+		}
+	}
 }
 
 void ADefaultPlayerController::SetupInputComponent()
@@ -47,6 +57,9 @@ void ADefaultPlayerController::SetupInputComponent()
 
 		if (InteractAction)
 			EIC->BindAction(InteractAction, ETriggerEvent::Started, this, &ADefaultPlayerController::Interact);
+
+		if (PauseAction)
+			EIC->BindAction(PauseAction, ETriggerEvent::Started, this, &ADefaultPlayerController::RequestPause);
 	}
 }
 
@@ -143,5 +156,13 @@ void ADefaultPlayerController::Interact()
 	if (CachedPlayerCharacter)
 	{
 		CachedPlayerCharacter->Interact();
+	}
+}
+
+void ADefaultPlayerController::RequestPause()
+{
+	if (UMenuFlowSubsystem* Flow = GetGameInstance() ? GetGameInstance()->GetSubsystem<UMenuFlowSubsystem>() : nullptr)
+	{
+		Flow->RequestBack();
 	}
 }
