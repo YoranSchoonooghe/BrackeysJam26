@@ -2,6 +2,7 @@
 
 #include "BusRouteManager.h"
 #include "../DataManager.h"
+#include "../Components/BusQueueComponent.h"
 
 ABusRouteManager::ABusRouteManager()
 {
@@ -59,6 +60,11 @@ void ABusRouteManager::PerformTeleport()
 
 		TransitionAlpha = 0.0f;
 		CurrentState = ETransitionState::Arriving;
+
+		if (auto* Queue = BusReference->FindComponentByClass<UBusQueueComponent>())
+		{
+			Queue->SpawnPassengersForStop(BusStops.IsValidIndex(CurrentStopIndex) ? BusStops[CurrentStopIndex] : nullptr);
+		}
 	}
 
 	AddStopBonusTime();

@@ -8,6 +8,7 @@
 
 
 class ADataManager;
+class ABusStop;
 
 UENUM(BlueprintType)
 enum class ETransitionState : uint8
@@ -32,6 +33,9 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Route")
 	TArray<AActor*> FinalStopPoints;
+
+	UPROPERTY(EditAnywhere, Category = "Route")
+	TArray<ABusStop*> BusStops;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Route")
 	AActor* BusReference;
