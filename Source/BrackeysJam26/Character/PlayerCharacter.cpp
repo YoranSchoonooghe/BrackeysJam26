@@ -138,6 +138,7 @@ void APlayerCharacter::Interact()
 void APlayerCharacter::RotateItem(const FVector2D& Value)
 {
 	if (!bInputLocked || !Inspection) return;
+	if (!Inspection->IsInspecting()) return;
 
 	Inspection->Rotate(Value, FollowCamera->GetRightVector(), FollowCamera->GetUpVector());
 }

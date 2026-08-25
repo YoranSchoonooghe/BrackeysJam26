@@ -58,6 +58,8 @@ void ABusSeat::Eject()
 	if (Occupant->Eject(EjectionForce))
 	{
 		EjectButtonWidget->SetVisibility(false);
+		
+		Occupant = nullptr;
 	}
 }
 
