@@ -36,6 +36,9 @@ public:
 	UFUNCTION()
 	ENPCState GetState() const { return NPCState; }
 
+	UFUNCTION(BlueprintCallable, Category = "NPC")
+	bool IsSitting() const { return NPCState == ENPCState::Sitting; }
+
 	UFUNCTION()
 	bool Eject(float Force);
 
