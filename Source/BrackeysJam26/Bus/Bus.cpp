@@ -13,6 +13,8 @@ ABus::ABus()
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	Mesh->SetupAttachment(RootComponent);
+	RoofMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Roof"));
+	RoofMesh->SetupAttachment(Mesh);
 
 	Spline = CreateDefaultSubobject<USplineComponent>(TEXT("Spline"));
 	Spline->SetupAttachment(RootComponent);
@@ -58,5 +60,10 @@ ABusSeat* ABus::GetAvailableSeat() const
 	}
 
 	return nullptr;
+}
+
+void ABus::SetRoofVisibility(bool visible)
+{
+	RoofMesh->SetVisibility(visible);
 }
 

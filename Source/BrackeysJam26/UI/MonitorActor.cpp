@@ -113,5 +113,9 @@ void AMonitorActor::Close()
 		PC->SetViewTargetWithBlend(this, FocusBlendTime);
 		SetSeatButtonsVisible(false);
 		ScreenWidgetComponent->SetVisibility(true);
+
+		auto* Bus = Cast<ABus>(UGameplayStatics::GetActorOfClass(GetWorld(), ABus::StaticClass()));
+		if (Bus)
+			Bus->SetRoofVisibility(true);
 	}
 }

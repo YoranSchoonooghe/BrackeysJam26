@@ -23,6 +23,8 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<UStaticMeshComponent> Mesh;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	TObjectPtr<UStaticMeshComponent> RoofMesh;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<USplineComponent> Spline;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<UArrowComponent> CheckLocation;
@@ -46,6 +48,9 @@ public:
 	FVector GetExitLocation() const;
 	UFUNCTION()
 	ABusSeat* GetAvailableSeat() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Roof")
+	void SetRoofVisibility(bool visible);
 
 	const TArray<ABusSeat*>& GetSeats() const { return Seats; }
 };
