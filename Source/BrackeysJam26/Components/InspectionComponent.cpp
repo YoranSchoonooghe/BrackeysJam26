@@ -41,9 +41,10 @@ void UInspectionComponent::StartInspecting(AActor* Actor)
 
     FActorSpawnParameters SpawnParams;
     SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+    SpawnParams.Template = OriginalActor;
 
     InspectionActor = World->SpawnActor<AActor>(
-        Actor->GetClass(),
+        OriginalActor->GetClass(),
         inspectionTransform,
         SpawnParams
     );
