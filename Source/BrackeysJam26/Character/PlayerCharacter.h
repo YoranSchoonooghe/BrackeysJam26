@@ -7,6 +7,7 @@
 class UCameraComponent;
 class ANPCCharacter;
 class UWidgetInteractionComponent;
+class UUserWidget;
 class UInspectionComponent;
 
 UCLASS()
@@ -70,8 +71,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "State")
 	void SetLoadingState(bool bNewLoadingState);
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "UI")
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<UUserWidget> HUDWidget;
+
+	UFUNCTION(BlueprintCallable, Category = "UI")
 	void ToggleHUDVisibility(bool bIsVisible);
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Transient)
+	TObjectPtr<UUserWidget> HUDWidgetInstance;
 
 private:
 	void ClampLookAngle();
@@ -82,5 +89,7 @@ private:
 	ANPCCharacter* TargetNPC;
 
 	bool bInputLocked{ false };
+
+	
 
 };

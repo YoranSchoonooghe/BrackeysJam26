@@ -9,6 +9,7 @@
 #include "BrackeysJam26/Character/DefaultPlayerController.h"
 #include "Components/ArrowComponent.h"
 #include "BrackeysJam26/Components/InspectionComponent.h"
+#include "Blueprint/UserWidget.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -48,6 +49,19 @@ void APlayerCharacter::BeginPlay()
 	{
 		WidgetInteraction->InteractionDistance = InteractRange;
 	}
+
+
+	//if (HUDWidget)
+	//{
+	//	HUDWidgetInstance = CreateWidget<UUserWidget>(GetWorld(), HUDWidget);
+
+	//	if (HUDWidgetInstance)
+	//	{
+	//		HUDWidgetInstance->AddToViewport();
+
+	//		HUDWidgetInstance->SetVisibility(ESlateVisibility::Hidden);
+	//	}
+	//}
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
@@ -216,6 +230,11 @@ void APlayerCharacter::SetInputLocked(bool bLocked)
 		WidgetInteraction->InteractionSource = bLocked ? EWidgetInteractionSource::Mouse : EWidgetInteractionSource::CenterScreen;
 		WidgetInteraction->InteractionDistance = bLocked ? FocusedInteractionDistance : InteractRange;
 	}
+
+	if (!bIsLoading)
+	{
+		ToggleHUDVisibility(!bLocked);
+	}
 }
 
 FTransform APlayerCharacter::GetInspectionAnchor() const
@@ -228,6 +247,32 @@ void APlayerCharacter::SetLoadingState(bool bNewLoadingState)
 	bIsLoading = bNewLoadingState;
 
 	ToggleHUDVisibility(!bIsLoading);
+}
+
+void APlayerCharacter::ToggleHUDVisibility(bool bIsVisible)
+{
+	if(!HUDWidgetInstance)
+	{
+		HUDWidgetInstance = CreateWidget<UUserWidget>(GetWorld(), HUDWidget);
+
+		if (HUDWidgetInstance)
+		{
+			HUDWidgetInstance->AddToViewport();
+		}
+	}
+	
+
+	if(HUDWidgetInstance)
+	{
+		if (bIsVisible)
+		{
+			HUDWidgetInstance->SetVisibility(ESlateVisibility::HitTestInvisible);
+		}
+		else
+		{
+			HUDWidgetInstance->SetVisibility(ESlateVisibility::Hidden);
+		}
+	}
 }
 
 void APlayerCharacter::ClampLookAngle()

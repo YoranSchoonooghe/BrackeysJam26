@@ -2,6 +2,7 @@
 
 #include "MenuFlowSubsystem.h"
 #include "Blueprint/UserWidget.h"
+#include "../Character/PlayerCharacter.h"
 #include "GameFramework/PlayerController.h"
 
 void UMenuStateBase::EnterState(UMenuFlowSubsystem* Flow)
@@ -23,6 +24,13 @@ void UMenuStateBase::EnterState(UMenuFlowSubsystem* Flow)
 
 	PC->SetPause(bPausesGame);
 	PC->SetShowMouseCursor(bShowsMouseCursor);
+
+	APlayerCharacter* Character = Cast<APlayerCharacter>(PC->GetPawn());
+
+	if (Character)
+	{
+		Character->ToggleHUDVisibility(!bShowsMouseCursor);
+	}
 
 	if (bShowsMouseCursor)
 	{
