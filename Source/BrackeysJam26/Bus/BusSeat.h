@@ -39,6 +39,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Seat")
 	void SetButtonVisible(bool bVisible);
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPassengerEjected);
+	UPROPERTY(BlueprintAssignable, Category = "Seat")
+	FOnPassengerEjected OnPassengerEjected;
+
 private:
 	ANPCCharacter* Occupant;
 
