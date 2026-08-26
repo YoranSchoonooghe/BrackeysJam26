@@ -45,6 +45,9 @@ public:
 	UFUNCTION()
 	void SetCurrentSeat(ABusSeat* Seat) { CurrentSeat = Seat; }
 
+	UFUNCTION()
+	void Despawn();
+
 private:
 	void AssignSeat();
 

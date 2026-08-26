@@ -31,6 +31,8 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<UArrowComponent> ExitLocation;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	TObjectPtr<UArrowComponent> DespawnLocation;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<UBusQueueComponent> BusQueue;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Seats")
@@ -46,6 +48,8 @@ public:
 	FVector GetCheckLocation() const;
 	UFUNCTION()
 	FVector GetExitLocation() const;
+	UFUNCTION()
+	FVector GetDespawnLocation() const;
 	UFUNCTION()
 	ABusSeat* GetAvailableSeat() const;
 

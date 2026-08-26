@@ -8,7 +8,7 @@
 
 ANPCAIController::ANPCAIController()
 {
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 
 }
 
@@ -46,6 +46,8 @@ void ANPCAIController::InitBBKeys()
 
 		auto exitLocation = Bus->GetExitLocation();
 		pBlackboardComponent->SetValueAsVector(TEXT("ExitLocation"), exitLocation);
+		auto despawnLocation = Bus->GetDespawnLocation();
+		pBlackboardComponent->SetValueAsVector(TEXT("DespawnLocation"), despawnLocation);
 
 		auto seat = Bus->GetAvailableSeat();
 		if (seat)

@@ -23,6 +23,8 @@ ABus::ABus()
 	CheckLocation->SetupAttachment(RootComponent);
 	ExitLocation = CreateDefaultSubobject<UArrowComponent>(TEXT("ExitLocation"));
 	ExitLocation->SetupAttachment(RootComponent);
+	DespawnLocation = CreateDefaultSubobject<UArrowComponent>(TEXT("DespawnLocation"));
+	DespawnLocation->SetupAttachment(RootComponent);
 
 	BusQueue = CreateDefaultSubobject<UBusQueueComponent>(TEXT("BusQueue"));
 }
@@ -47,6 +49,11 @@ FVector ABus::GetCheckLocation() const
 FVector ABus::GetExitLocation() const
 {
 	return ExitLocation->GetComponentLocation();
+}
+
+FVector ABus::GetDespawnLocation() const
+{
+	return DespawnLocation->GetComponentLocation();
 }
 
 ABusSeat* ABus::GetAvailableSeat() const

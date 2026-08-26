@@ -49,6 +49,11 @@ void ANPCCharacter::ChangeState(ENPCState NewState)
 	}
 }
 
+void ANPCCharacter::Despawn()
+{
+	Destroy();
+}
+
 void ANPCCharacter::AssignSeat()
 {
 	auto* Bus = Cast<ABus>(UGameplayStatics::GetActorOfClass(GetWorld(), ABus::StaticClass()));
