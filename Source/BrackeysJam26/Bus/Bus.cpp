@@ -33,6 +33,7 @@ void ABus::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	OnOpenDoors.Broadcast();
 }
 
 //void ABus::Tick(float DeltaTime)

@@ -57,4 +57,12 @@ public:
 	void SetRoofVisibility(bool visible);
 
 	const TArray<ABusSeat*>& GetSeats() const { return Seats; }
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnBusOpenDoors);
+	UPROPERTY(BlueprintAssignable, Category = "Bus")
+	FOnBusOpenDoors OnOpenDoors;
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnBusCloseDoors);
+	UPROPERTY(BlueprintAssignable, Category = "Bus")
+	FOnBusCloseDoors OnCloseDoors;
 };

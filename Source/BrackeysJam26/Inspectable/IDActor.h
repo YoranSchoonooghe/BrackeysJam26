@@ -5,6 +5,8 @@
 #include "BrackeysJam26/InspectableInterface.h"
 #include "IDActor.generated.h"
 
+class UTextRenderComponent;
+
 UCLASS()
 class BRACKEYSJAM26_API AIDActor : public AActor, public IInspectableInterface
 {
@@ -16,7 +18,18 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	TObjectPtr<UStaticMeshComponent> Mesh;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	TObjectPtr<UTextRenderComponent> FirstNameText;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	TObjectPtr<UTextRenderComponent> LastNameText;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	TObjectPtr<UTextRenderComponent> DateOfBirthText;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	TObjectPtr<UTextRenderComponent> IDNumberText;
+
 public:	
-	virtual void Tick(float DeltaTime) override;
+	//virtual void Tick(float DeltaTime) override;
 
 };
