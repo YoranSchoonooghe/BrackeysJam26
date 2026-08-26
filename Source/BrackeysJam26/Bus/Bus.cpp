@@ -3,6 +3,8 @@
 #include "Components/ArrowComponent.h"
 #include "BusSeat.h"
 #include "BrackeysJam26/Components/BusQueueComponent.h"
+#include "BrackeysJam26/Inspectable/IDActor.h"
+#include "BrackeysJam26/Inspectable/TicketActor.h"
 
 ABus::ABus()
 {
@@ -33,6 +35,8 @@ void ABus::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	SetPassengerDocsVisibility(false);
+
 	OnOpenDoors.Broadcast();
 }
 
@@ -73,5 +77,20 @@ ABusSeat* ABus::GetAvailableSeat() const
 void ABus::SetRoofVisibility(bool visible)
 {
 	RoofMesh->SetVisibility(visible);
+}
+
+void ABus::SetPassengerDocsVisibility(bool bVisible)
+{
+	if (IDActor)
+	{
+		IDActor->SetActorHiddenInGame(!bVisible);
+		IDActor->SetActorEnableCollision(bVisible);
+	}
+
+	if (TicketActor)
+	{
+		TicketActor->SetActorHiddenInGame(!bVisible);
+		TicketActor->SetActorEnableCollision(bVisible);
+	}
 }
 

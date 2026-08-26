@@ -8,6 +8,8 @@ class USplineComponent;
 class UArrowComponent;
 class ABusSeat;
 class UBusQueueComponent;
+class AIDActor;
+class ATicketActor;
 
 UCLASS()
 class BRACKEYSJAM26_API ABus : public AActor
@@ -38,6 +40,11 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Seats")
 	TArray<ABusSeat*> Seats;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Passenger Docs")
+	TObjectPtr<AIDActor> IDActor;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Passenger Docs")
+	TObjectPtr<ATicketActor> TicketActor;
+
 public:	
 	//virtual void Tick(float DeltaTime) override;
 
@@ -56,6 +63,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Roof")
 	void SetRoofVisibility(bool visible);
 
+	UFUNCTION(BlueprintCallable, Category = "Passenger Docs")
+	void SetPassengerDocsVisibility(bool bVisible);
+
 	const TArray<ABusSeat*>& GetSeats() const { return Seats; }
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnBusOpenDoors);
@@ -65,4 +75,5 @@ public:
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnBusCloseDoors);
 	UPROPERTY(BlueprintAssignable, Category = "Bus")
 	FOnBusCloseDoors OnCloseDoors;
+
 };

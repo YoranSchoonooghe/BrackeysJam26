@@ -5,6 +5,7 @@
 #include "BrackeysJam26/NPC/NPCCharacter.h"
 #include <Kismet/GameplayStatics.h>
 #include "BrackeysJam26/Character/PlayerCharacter.h"
+#include "BrackeysJam26/Bus/Bus.h"
 
 EBTNodeResult::Type UBTT_RequestPermission::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
@@ -28,6 +29,13 @@ EBTNodeResult::Type UBTT_RequestPermission::ExecuteTask(UBehaviorTreeComponent& 
     {
         monitorActor->ShowScreen(EMonitorScreen::RequestPermission);
     }
+
+    auto* Bus = Cast<ABus>(UGameplayStatics::GetActorOfClass(GetWorld(), ABus::StaticClass()));
+    if (Bus)
+    {
+        Bus->SetPassengerDocsVisibility(true);
+    }
+
     NPCCharacter->ChangeState(ENPCState::Wait);
     PlayerChar->SetTargetNPC(NPCCharacter);
 

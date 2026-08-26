@@ -46,6 +46,11 @@ void ANPCCharacter::ChangeState(ENPCState NewState)
 		{
 			Queue->StartNextPassenger();
 		}
+
+		if (Bus)
+		{
+			Bus->SetPassengerDocsVisibility(false);
+		}
 	}
 }
 
