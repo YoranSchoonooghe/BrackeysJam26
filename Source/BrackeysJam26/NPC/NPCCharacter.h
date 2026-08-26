@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "../DataManager.h"
 #include "NPCCharacter.generated.h"
 
 class ABusSeat;
@@ -47,6 +48,9 @@ public:
 
 	UFUNCTION()
 	void Despawn();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	FPassengerRecord PassengerRecord;
 
 private:
 	void AssignSeat();

@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "BrackeysJam26/InspectableInterface.h"
+#include "../DataManager.h"
 #include "IDActor.generated.h"
 
 class UTextRenderComponent;
@@ -32,4 +33,6 @@ protected:
 public:	
 	//virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable, Category = "ID")
+	void UpdateID(const FPassengerData& PassportData);
 };

@@ -4,6 +4,7 @@
 #include "BrackeysJam26/UI/MonitorActor.h"
 #include "BrackeysJam26/Bus/Bus.h"
 #include "BrackeysJam26/Bus/BusStop.h"
+#include "BrackeysJam26/DataManager.h"
 
 UBusQueueComponent::UBusQueueComponent()
 {
@@ -41,6 +42,17 @@ void UBusQueueComponent::SpawnPassengersForStop(ABusStop* Stop)
 
 	const int32 PassengerCount = FMath::RandRange(MinPassengers, MaxPassengers);
 
+	TArray<FPassengerRecord> GeneratedQueue;
+	ADataManager* DataManager = Cast<ADataManager>(UGameplayStatics::GetActorOfClass(GetWorld(), ADataManager::StaticClass()));
+
+	if (DataManager)
+	{
+		int32 MinImposters = 0;
+		int32 MaxImposters = FMath::Clamp(PassengerCount / 2, 0, PassengerCount);
+
+		GeneratedQueue = DataManager->GeneratePassengerQueue(PassengerCount, MinImposters, MaxImposters);
+	}
+
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 
@@ -66,6 +78,11 @@ void UBusQueueComponent::SpawnPassengersForStop(ABusStop* Stop)
 
 		if (auto* Passenger = GetWorld()->SpawnActor<ANPCCharacter>(PassengerClass, SpawnLocation, SpawnRotation, SpawnParams))
 		{
+			if (GeneratedQueue.IsValidIndex(i))
+			{
+				Passenger->PassengerRecord = GeneratedQueue[i];
+			}
+
 			PassengersQueue.Enqueue(Passenger);
 		}
 	}

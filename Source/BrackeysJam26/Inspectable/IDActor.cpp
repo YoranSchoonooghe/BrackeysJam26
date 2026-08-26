@@ -42,3 +42,10 @@ void AIDActor::BeginPlay()
 //
 //}
 
+void AIDActor::UpdateID(const FPassengerData& PassportData)
+{
+	FirstNameText->SetText(FText::FromString(PassportData.FirstName));
+	LastNameText->SetText(FText::FromString(PassportData.LastName));
+	DateOfBirthText->SetText(FText::FromString(PassportData.DOB));
+	IDNumberText->SetText(FText::FromString(PassportData.IDNumber));
+}

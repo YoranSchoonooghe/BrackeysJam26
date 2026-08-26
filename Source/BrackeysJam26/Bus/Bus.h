@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "../DataManager.h"
 #include "Bus.generated.h"
 
 class USplineComponent;
@@ -65,6 +66,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Passenger Docs")
 	void SetPassengerDocsVisibility(bool bVisible);
+
+	UFUNCTION(BlueprintCallable, Category = "Bus|Documents")
+	void UpdatePassengerDocs(const FPassengerRecord& Record);
 
 	const TArray<ABusSeat*>& GetSeats() const { return Seats; }
 

@@ -33,6 +33,8 @@ EBTNodeResult::Type UBTT_RequestPermission::ExecuteTask(UBehaviorTreeComponent& 
     auto* Bus = Cast<ABus>(UGameplayStatics::GetActorOfClass(GetWorld(), ABus::StaticClass()));
     if (Bus)
     {
+        Bus->UpdatePassengerDocs(NPCCharacter->PassengerRecord);
+
         Bus->SetPassengerDocsVisibility(true);
     }
 

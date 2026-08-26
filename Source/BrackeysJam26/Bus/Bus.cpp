@@ -94,3 +94,16 @@ void ABus::SetPassengerDocsVisibility(bool bVisible)
 	}
 }
 
+void ABus::UpdatePassengerDocs(const FPassengerRecord& Record)
+{
+	if (IDActor)
+	{
+		IDActor->UpdateID(Record.PresentedPassport);
+	}
+
+	if (TicketActor)
+	{
+		TicketActor->UpdateTicket(Record.PresentedTicket);
+	}
+}
+
