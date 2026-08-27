@@ -44,6 +44,10 @@ public:
 
 	void Rotate(const FVector2D& Value, const FVector& CameraRight, const FVector& CameraUp);
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnStartedInspecting);
+	UPROPERTY(BlueprintAssignable, Category = "Inspection")
+	FOnStartedInspecting OnStartedInspecting;
+
 private:
 	void UpdateInspectAnimation(float DeltaTime);
 	void BlurBackground();

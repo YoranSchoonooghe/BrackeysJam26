@@ -5,6 +5,8 @@
 #include "BrackeysJam26/Components/BusQueueComponent.h"
 #include "BrackeysJam26/Inspectable/IDActor.h"
 #include "BrackeysJam26/Inspectable/TicketActor.h"
+#include "BusRouteManager.h"
+#include <Kismet/GameplayStatics.h>
 
 ABus::ABus()
 {
@@ -39,6 +41,12 @@ void ABus::BeginPlay()
 	SetPassengerDocsVisibility(false);
 
 	OnOpenDoors.Broadcast();
+
+	auto* BusManager = Cast<ABusRouteManager>(UGameplayStatics::GetActorOfClass(GetWorld(), ABusRouteManager::StaticClass()));
+	if (BusManager)
+	{
+		BusManager->OnArrive.AddDynamic(this, &ABus::OpenDoors);
+	}
 }
 
 //void ABus::Tick(float DeltaTime)
@@ -106,6 +114,11 @@ void ABus::UpdatePassengerDocs(const FPassengerRecord& Record)
 	{
 		TicketActor->UpdateTicket(Record.PresentedTicket);
 	}
+}
+
+void ABus::OpenDoors()
+{
+	OnOpenDoors.Broadcast();
 }
 
 void ABus::CloseDoors()

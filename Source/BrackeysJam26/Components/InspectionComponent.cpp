@@ -62,6 +62,8 @@ void UInspectionComponent::StartInspecting(AActor* Actor)
     bIsInspectAnimationPlaying = true;
 
     BlurBackground();
+
+    OnStartedInspecting.Broadcast();
 }
 
 void UInspectionComponent::StopInspecting()

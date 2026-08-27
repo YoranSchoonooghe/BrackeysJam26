@@ -32,6 +32,8 @@ void ABusRouteManager::StartDeparture()
 	{
 		Player->SetLoadingState(true);
 	}
+
+	OnDepart.Broadcast();
 }
 
 FString ABusRouteManager::GetFormattedTimeRemaining()
@@ -146,6 +148,8 @@ void ABusRouteManager::Tick(float DeltaTime)
 			{
 				Player->SetLoadingState(false);
 			}
+
+			OnArrive.Broadcast();
 		}
 	}
 }
