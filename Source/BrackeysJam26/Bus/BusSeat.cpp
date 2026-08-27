@@ -9,6 +9,9 @@ ABusSeat::ABusSeat()
 
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 
+	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	Mesh->SetupAttachment(RootComponent);
+
 	EjectButtonWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("EjectButtonWidget"));
 	EjectButtonWidget->SetupAttachment(RootComponent);
 	EjectButtonWidget->SetWidgetSpace(EWidgetSpace::World);

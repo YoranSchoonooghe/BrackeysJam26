@@ -22,6 +22,8 @@ protected:
 	float EjectionForce{ 20000.0f };
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	TObjectPtr<UStaticMeshComponent> Mesh;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<UWidgetComponent> EjectButtonWidget;
 
 public:
