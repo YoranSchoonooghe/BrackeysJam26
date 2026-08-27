@@ -52,6 +52,11 @@ void ANPCCharacter::ChangeState(ENPCState NewState)
 			Bus->SetPassengerDocsVisibility(false);
 		}
 	}
+
+	if (NPCState == ENPCState::Sitting)
+	{
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
 }
 
 void ANPCCharacter::Despawn()

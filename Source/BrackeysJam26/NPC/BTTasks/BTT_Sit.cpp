@@ -23,5 +23,7 @@ EBTNodeResult::Type UBTT_Sit::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uin
 
     NPCCharacter->ChangeState(ENPCState::Sitting);
 
+    NPCCharacter->SetActorLocation(Seat->GetActorLocation());
+
 	return EBTNodeResult::Succeeded;
 }
