@@ -8,6 +8,7 @@
 
 class ABusSeat;
 class UMaterialInterface;
+class UExpireComponent;
 
 UENUM(BlueprintType)
 enum class ENPCState : uint8
@@ -29,6 +30,9 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components");
+	TObjectPtr<UExpireComponent> Expire;
 
 public:
 	//virtual void Tick(float DeltaTime) override;

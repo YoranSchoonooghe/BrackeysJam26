@@ -8,11 +8,13 @@
 #include "AIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include <Kismet/GameplayStatics.h>
+#include "BrackeysJam26/Components/ExpireComponent.h"
 
 ANPCCharacter::ANPCCharacter()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
+	Expire = CreateDefaultSubobject<UExpireComponent>(TEXT("Expire"));
 }
 
 void ANPCCharacter::BeginPlay()
@@ -137,6 +139,8 @@ bool ANPCCharacter::Eject(float Force)
 
 		MeshComp->WakeAllRigidBodies();
 	}
+
+	Expire->StartExpire();
 
 	return true;
 }
