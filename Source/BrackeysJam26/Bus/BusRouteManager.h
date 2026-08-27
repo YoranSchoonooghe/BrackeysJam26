@@ -9,6 +9,7 @@
 
 class ADataManager;
 class ABusStop;
+class UMenuStateBase;
 
 UENUM(BlueprintType)
 enum class ETransitionState : uint8
@@ -64,10 +65,10 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Route")
 	void BP_UpdateStopScreen(const FString& NextStopName);
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Timer")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Timer")
 	float TimeRemaining = 300.f;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Timer")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Timer")
 	float MaxNegativeTime = -120.f;
 
 	UFUNCTION(BlueprintCallable, Category = "Timer")
@@ -75,6 +76,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Timer")
 	FString GetFormattedTimeRemaining();
+
+	UPROPERTY(EditAnywhere, Category = "Route")
+	TSubclassOf<UMenuStateBase> MenuState;
 
 private:
 	void PerformTeleport();

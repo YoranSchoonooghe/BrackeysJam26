@@ -5,6 +5,7 @@
 #include "../Components/BusQueueComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "BrackeysJam26/Character/PlayerCharacter.h"
+#include "../HUD/MenuFlowSubsystem.h"
 
 ABusRouteManager::ABusRouteManager()
 {
@@ -87,7 +88,12 @@ void ABusRouteManager::Tick(float DeltaTime)
 
 		if (TimeRemaining <= MaxNegativeTime)
 		{
-			//Game Over??
+			UMenuFlowSubsystem* MenuFlowSubsystem = GetGameInstance()->GetSubsystem<UMenuFlowSubsystem>();
+
+			if (MenuFlowSubsystem)
+			{
+				MenuFlowSubsystem->SetRootState(MenuState);
+			}
 		}
 	}
 

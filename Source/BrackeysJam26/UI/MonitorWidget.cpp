@@ -5,8 +5,8 @@
 
 void UMonitorWidget::ShowScreen(EMonitorScreen Screen)
 {
-	if (ScreenSwitcher)
-	{
-		ScreenSwitcher->SetActiveWidgetIndex(static_cast<int32>(Screen));
-	}
+	//if (ScreenSwitcher)
+	//{
+	//	ScreenSwitcher->SetActiveWidgetIndex(static_cast<int32>(Screen));
+	//}
 }
