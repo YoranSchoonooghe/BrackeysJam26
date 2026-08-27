@@ -10,6 +10,7 @@
 #include "Components/ArrowComponent.h"
 #include "BrackeysJam26/Components/InspectionComponent.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/WidgetComponent.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -68,7 +69,14 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (bInputLocked || !FollowCamera || bIsLoading)
+	if (bInputLocked)
+	{
+		UpdateLockedInteractionTrace();
+		UpdateHoveredNPC();
+		return;
+	}
+
+	if (!FollowCamera || bIsLoading)
 	{
 		OnUpdateInteractionPrompt(FText::GetEmpty());
 		return;
@@ -143,14 +151,14 @@ void APlayerCharacter::Interact()
 	{
 		if (!WidgetInteraction) return;
 
-		if (WidgetInteraction->IsOverInteractableWidget())
+		if (Cast<UWidgetComponent>(LockedInteractionHit.GetComponent()))
 		{
 			WidgetInteraction->PressPointerKey(EKeys::LeftMouseButton);
 			WidgetInteraction->ReleasePointerKey(EKeys::LeftMouseButton);
 			return;
 		}
 
-		AActor* HitActor = WidgetInteraction->GetLastHitResult().GetActor();
+		AActor* HitActor = LockedInteractionHit.GetActor();
 		if (HitActor && HitActor->Implements<UInteractableInterface>())
 		{
 			IInteractableInterface::Execute_Interact(HitActor);
@@ -227,13 +235,19 @@ void APlayerCharacter::SetInputLocked(bool bLocked)
 
 	if (WidgetInteraction)
 	{
-		WidgetInteraction->InteractionSource = bLocked ? EWidgetInteractionSource::Mouse : EWidgetInteractionSource::CenterScreen;
+		WidgetInteraction->InteractionSource = bLocked ? EWidgetInteractionSource::Custom : EWidgetInteractionSource::CenterScreen;
 		WidgetInteraction->InteractionDistance = bLocked ? FocusedInteractionDistance : InteractRange;
 	}
 
 	if (!bIsLoading)
 	{
 		ToggleHUDVisibility(!bLocked);
+	}
+
+	if (!bLocked && HoveredNPC)
+	{
+		HoveredNPC->SetHighlighted(false);
+		HoveredNPC = nullptr;
 	}
 }
 
@@ -272,6 +286,51 @@ void APlayerCharacter::ToggleHUDVisibility(bool bIsVisible)
 		{
 			HUDWidgetInstance->SetVisibility(ESlateVisibility::Hidden);
 		}
+	}
+}
+
+void APlayerCharacter::UpdateLockedInteractionTrace()
+{
+	LockedInteractionHit = FHitResult();
+
+	if (!WidgetInteraction) return;
+
+	APlayerController* PC = Cast<APlayerController>(Controller);
+	if (!PC) return;
+
+	FVector WorldLocation, WorldDirection;
+	if (!PC->DeprojectMousePositionToWorld(WorldLocation, WorldDirection)) return;
+
+	const FVector TraceEnd = WorldLocation + WorldDirection * WidgetInteraction->InteractionDistance;
+
+	FCollisionQueryParams CollisionParams;
+	CollisionParams.AddIgnoredActor(this);
+
+	GetWorld()->LineTraceSingleByChannel(LockedInteractionHit, WorldLocation, TraceEnd, ECC_Visibility, CollisionParams);
+
+	WidgetInteraction->SetCustomHitResult(LockedInteractionHit);
+}
+
+void APlayerCharacter::UpdateHoveredNPC()
+{
+	auto* NPC = Cast<ANPCCharacter>(LockedInteractionHit.GetActor());
+	if (NPC && !NPC->IsSitting())
+	{
+		NPC = nullptr;
+	}
+
+	if (NPC == HoveredNPC) return;
+
+	if (HoveredNPC)
+	{
+		HoveredNPC->SetHighlighted(false);
+	}
+
+	HoveredNPC = NPC;
+
+	if (HoveredNPC)
+	{
+		HoveredNPC->SetHighlighted(true);
 	}
 }
 

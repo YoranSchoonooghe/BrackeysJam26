@@ -82,14 +82,19 @@ public:
 
 private:
 	void ClampLookAngle();
+	void UpdateHoveredNPC();
+	void UpdateLockedInteractionTrace();
 
 	float InitialControlYaw{ 0.0f };
 	float InitialControlPitch{ 0.0f };
 
 	ANPCCharacter* TargetNPC;
 
-	bool bInputLocked{ false };
+	UPROPERTY()
+	TObjectPtr<ANPCCharacter> HoveredNPC;
 
-	
+	FHitResult LockedInteractionHit;
+
+	bool bInputLocked{ false };
 
 };

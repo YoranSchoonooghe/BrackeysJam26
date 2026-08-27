@@ -57,8 +57,6 @@ void AMonitorActor::BlendToTargetCamera()
 	{
 		PlayerCharacter->SetInputLocked(true);
 	}
-
-	SetSeatButtonsVisible(true);
 }
 
 void AMonitorActor::BlendToPlayerCamera()

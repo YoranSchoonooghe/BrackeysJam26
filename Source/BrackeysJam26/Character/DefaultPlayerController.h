@@ -4,6 +4,7 @@
 #include "GameFramework/PlayerController.h"
 #include "InputActionValue.h"
 #include "BrackeysJam26/UI/MonitorActor.h"
+#include "../DataManager.h"
 #include "DefaultPlayerController.generated.h"
 
 class UInputMappingContext;
@@ -11,6 +12,7 @@ class UInputAction;
 class APlayerCharacter;
 class ANPCCharacter;
 class UMenuStateBase;
+class UCharacterInformationWidget;
 
 UCLASS()
 class BRACKEYSJAM26_API ADefaultPlayerController : public APlayerController
@@ -49,6 +51,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
 	TSubclassOf<UUserWidget> CloseButtonWidgetClass;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
+	TSubclassOf<UCharacterInformationWidget> CharacterInfoWidgetClass;
+
 	UPROPERTY(EditAnywhere, Category = "Menu")
 	TSubclassOf<UMenuStateBase> DefaultRootMenuState;
 
@@ -58,6 +63,12 @@ public:
 
 	void ShowCloseButtonWidget();
 	void HideCloseButtonWidget();
+
+	void ShowCharacterInfoWidget(const FPassengerRecord& Record);
+	void HideCharacterInfoWidget();
+
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	void HandleCloseButtonPressed();
 
 	UFUNCTION(BlueprintCallable, Category = "Monitor")
 	void ShowMonitorScreen(EMonitorScreen Screen);
@@ -78,6 +89,9 @@ private:
 
 	UPROPERTY()
 	TObjectPtr<UUserWidget> CloseButtonWidgetInstance;
+
+	UPROPERTY()
+	TObjectPtr<UCharacterInformationWidget> CharacterInfoWidgetInstance;
 
 	UPROPERTY()
 	TObjectPtr<AMonitorActor> CachedMonitor;

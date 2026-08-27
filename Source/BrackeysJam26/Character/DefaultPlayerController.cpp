@@ -6,6 +6,7 @@
 #include "BrackeysJam26/HUD/PermissionWidget.h"
 #include "BrackeysJam26/HUD/MenuFlowSubsystem.h"
 #include "BrackeysJam26/HUD/MenuStateBase.h"
+#include "BrackeysJam26/HUD/CharacterInformationWidget.h"
 #include "BrackeysJam26/NPC/NPCCharacter.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -81,6 +82,11 @@ void ADefaultPlayerController::OnPossess(APawn* InPawn)
 	{
 		CloseButtonWidgetInstance = CreateWidget<UUserWidget>(this, CloseButtonWidgetClass);
 	}
+
+	if (CharacterInfoWidgetClass)
+	{
+		CharacterInfoWidgetInstance = CreateWidget<UCharacterInformationWidget>(this, CharacterInfoWidgetClass);
+	}
 }
 
 void ADefaultPlayerController::OnUnPossess()
@@ -117,6 +123,35 @@ void ADefaultPlayerController::HideCloseButtonWidget()
 	if (!CloseButtonWidgetInstance) return;
 
 	CloseButtonWidgetInstance->RemoveFromParent();
+}
+
+void ADefaultPlayerController::ShowCharacterInfoWidget(const FPassengerRecord& Record)
+{
+	if (!CharacterInfoWidgetInstance) return;
+
+	CharacterInfoWidgetInstance->UpdateCharacterInformation(Record.TrueIdentity, Record.TrueTicket);
+	CharacterInfoWidgetInstance->AddToViewport();
+}
+
+void ADefaultPlayerController::HideCharacterInfoWidget()
+{
+	if (!CharacterInfoWidgetInstance) return;
+
+	CharacterInfoWidgetInstance->RemoveFromParent();
+}
+
+void ADefaultPlayerController::HandleCloseButtonPressed()
+{
+	if (CharacterInfoWidgetInstance && CharacterInfoWidgetInstance->IsInViewport())
+	{
+		HideCharacterInfoWidget();
+		return;
+	}
+
+	if (CachedMonitor)
+	{
+		CachedMonitor->Close();
+	}
 }
 
 void ADefaultPlayerController::ShowMonitorScreen(EMonitorScreen Screen)

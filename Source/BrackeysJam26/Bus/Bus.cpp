@@ -86,6 +86,7 @@ ABusSeat* ABus::GetAvailableSeat() const
 void ABus::SetRoofVisibility(bool visible)
 {
 	RoofMesh->SetVisibility(visible);
+	RoofMesh->SetCollisionEnabled(visible ? ECollisionEnabled::QueryAndPhysics : ECollisionEnabled::NoCollision);
 }
 
 void ABus::SetPassengerDocsVisibility(bool bVisible)

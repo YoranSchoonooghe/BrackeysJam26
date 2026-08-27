@@ -25,6 +25,8 @@ protected:
 	TObjectPtr<UStaticMeshComponent> Mesh;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<UWidgetComponent> EjectButtonWidget;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	TObjectPtr<UWidgetComponent> InfoButtonWidget;
 
 public:
 	//virtual void Tick(float DeltaTime) override;
@@ -40,6 +42,12 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Seat")
 	void SetButtonVisible(bool bVisible);
+
+	UFUNCTION(BlueprintCallable, Category = "Seat")
+	bool IsButtonVisible() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Seat")
+	void ShowCharacterInfo();
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPassengerEjected);
 	UPROPERTY(BlueprintAssignable, Category = "Seat")

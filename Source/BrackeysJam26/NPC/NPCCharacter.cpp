@@ -59,6 +59,34 @@ void ANPCCharacter::Despawn()
 	Destroy();
 }
 
+void ANPCCharacter::Interact_Implementation()
+{
+	if (NPCState != ENPCState::Sitting || !CurrentSeat) return;
+
+	const bool bWasVisible = CurrentSeat->IsButtonVisible();
+
+	if (auto* Bus = Cast<ABus>(UGameplayStatics::GetActorOfClass(GetWorld(), ABus::StaticClass())))
+	{
+		for (ABusSeat* Seat : Bus->GetSeats())
+		{
+			if (Seat)
+			{
+				Seat->SetButtonVisible(false);
+			}
+		}
+	}
+
+	CurrentSeat->SetButtonVisible(!bWasVisible);
+}
+
+void ANPCCharacter::SetHighlighted(bool bHighlighted)
+{
+	if (USkeletalMeshComponent* MeshComp = GetMesh())
+	{
+		MeshComp->SetOverlayMaterial(bHighlighted ? OutlineMaterial : nullptr);
+	}
+}
+
 void ANPCCharacter::AssignSeat()
 {
 	auto* Bus = Cast<ABus>(UGameplayStatics::GetActorOfClass(GetWorld(), ABus::StaticClass()));
