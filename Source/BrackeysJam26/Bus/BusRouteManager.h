@@ -80,6 +80,13 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Route")
 	TSubclassOf<UMenuStateBase> MenuState;
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDepart);
+	UPROPERTY(BlueprintAssignable, Category = "Transition")
+	FOnDepart OnDepart;
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnArrive);
+	UPROPERTY(BlueprintAssignable, Category = "Transition")
+	FOnArrive OnArrive;
+
 private:
 	void PerformTeleport();
 

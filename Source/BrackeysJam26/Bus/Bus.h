@@ -82,6 +82,8 @@ public:
 
 private:
 	UFUNCTION()
+	void OpenDoors();
+	UFUNCTION()
 	void CloseDoors();
 
 };
