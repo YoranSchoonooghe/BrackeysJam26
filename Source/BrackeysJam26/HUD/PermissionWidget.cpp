@@ -11,6 +11,8 @@ void UPermissionWidget::AllowNPCOnBus()
 	auto* NPC = player->GetTargetNPC();
 	if (!NPC) return;
 	NPC->ChangeState(ENPCState::WalkToSeat);
+
+	OnPassengerAllowed.Broadcast();
 }
 
 void UPermissionWidget::DenyNPCFromBus()
@@ -21,4 +23,6 @@ void UPermissionWidget::DenyNPCFromBus()
 	auto* NPC = player->GetTargetNPC();
 	if (!NPC) return;
 	NPC->ChangeState(ENPCState::ExitBus);
+
+	OnPassengerDenied.Broadcast();
 }

@@ -15,4 +15,13 @@ protected:
 
 	UFUNCTION(BlueprintCallable, Category = "Permission")
 	void DenyNPCFromBus();
+
+public:
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPassengerAllowed);
+	UPROPERTY(BlueprintAssignable, Category = "Permission")
+	FOnPassengerAllowed OnPassengerAllowed;
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPassengerDenied);
+	UPROPERTY(BlueprintAssignable, Category = "Permission")
+	FOnPassengerDenied OnPassengerDenied;
 };

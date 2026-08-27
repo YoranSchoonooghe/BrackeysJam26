@@ -101,6 +101,8 @@ void UBusQueueComponent::StartNextPassenger()
 			monitorActor->ShowScreen(EMonitorScreen::CameraView);
 		}
 
+		OnQueueEmpty.Broadcast();
+
 		return;
 	}
 

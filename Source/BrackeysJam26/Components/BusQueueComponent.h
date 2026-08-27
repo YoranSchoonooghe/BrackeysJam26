@@ -42,6 +42,10 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Passengers")
 	float SpawnRadius = 200.0f;
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnQueueEmpty);
+	UPROPERTY(BlueprintAssignable, Category = "Passengers")
+	FOnQueueEmpty OnQueueEmpty;
+
 private:
 	TQueue<ANPCCharacter*> PassengersQueue;
 

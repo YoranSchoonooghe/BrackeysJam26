@@ -29,6 +29,7 @@ ABus::ABus()
 	DespawnLocation->SetupAttachment(RootComponent);
 
 	BusQueue = CreateDefaultSubobject<UBusQueueComponent>(TEXT("BusQueue"));
+	BusQueue->OnQueueEmpty.AddDynamic(this, &ABus::CloseDoors);
 }
 
 void ABus::BeginPlay()
@@ -105,5 +106,10 @@ void ABus::UpdatePassengerDocs(const FPassengerRecord& Record)
 	{
 		TicketActor->UpdateTicket(Record.PresentedTicket);
 	}
+}
+
+void ABus::CloseDoors()
+{
+	OnCloseDoors.Broadcast();
 }
 

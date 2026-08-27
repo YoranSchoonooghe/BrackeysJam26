@@ -80,4 +80,8 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Bus")
 	FOnBusCloseDoors OnCloseDoors;
 
+private:
+	UFUNCTION()
+	void CloseDoors();
+
 };
