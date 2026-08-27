@@ -163,6 +163,7 @@ TArray<FPassengerRecord> ADataManager::GeneratePassengerQueue(int32 TotalPasseng
 	{
 		FPassengerRecord NewRecord;
 		NewRecord.TrueIdentity = GenerateRandomPassenger();
+		NewRecord.TrueTicket = GenerateValidTicket();
 
 		if (CurrentImposters < TargetImposters)
 		{
@@ -171,13 +172,13 @@ TArray<FPassengerRecord> ADataManager::GeneratePassengerQueue(int32 TotalPasseng
 			{
 				//Fake Passport, Valid Ticket
 				NewRecord.PresentedPassport = GenerateImposterPassport(NewRecord.TrueIdentity);
-				NewRecord.PresentedTicket = GenerateValidTicket();
+				NewRecord.PresentedTicket = NewRecord.TrueTicket;
 			}
 			else
 			{
 				//Valid Passport, Fake Ticket
 				NewRecord.PresentedPassport = NewRecord.TrueIdentity;
-				NewRecord.PresentedTicket = GenerateFakeTicket(GenerateValidTicket());
+				NewRecord.PresentedTicket = GenerateFakeTicket(NewRecord.TrueTicket);
 			}
 			CurrentImposters++;
 		}
@@ -185,7 +186,7 @@ TArray<FPassengerRecord> ADataManager::GeneratePassengerQueue(int32 TotalPasseng
 		{
 			NewRecord.bIsImposter = false;
 			NewRecord.PresentedPassport = NewRecord.TrueIdentity;
-			NewRecord.PresentedTicket = GenerateValidTicket();
+			NewRecord.PresentedTicket = NewRecord.TrueTicket;
 		}
 
 		//In case we do multiple days?

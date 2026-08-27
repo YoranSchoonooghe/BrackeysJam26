@@ -28,6 +28,7 @@ EBTNodeResult::Type UBTT_RequestPermission::ExecuteTask(UBehaviorTreeComponent& 
     if (monitorActor)
     {
         monitorActor->ShowScreen(EMonitorScreen::RequestPermission);
+        monitorActor->UpdateCharacterInfo(NPCCharacter->PassengerRecord);
     }
 
     auto* Bus = Cast<ABus>(UGameplayStatics::GetActorOfClass(GetWorld(), ABus::StaticClass()));

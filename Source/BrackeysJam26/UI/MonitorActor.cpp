@@ -36,6 +36,14 @@ void AMonitorActor::ShowScreen(EMonitorScreen Screen)
 	}
 }
 
+void AMonitorActor::UpdateCharacterInfo(const FPassengerRecord& Record)
+{
+	if (UMonitorWidget* Widget = Cast<UMonitorWidget>(ScreenWidgetComponent->GetWidget()))
+	{
+		Widget->UpdateCharacterInfo(Record);
+	}
+}
+
 void AMonitorActor::BlendToTargetCamera()
 {
 	if (!TargetCamera) return;

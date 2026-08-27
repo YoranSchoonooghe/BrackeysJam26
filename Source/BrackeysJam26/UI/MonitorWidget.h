@@ -4,16 +4,19 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "../DataManager.h"
 #include "MonitorWidget.generated.h"
 
 class UWidgetSwitcher;
+class UCharacterInformationWidget;
 
 UENUM(BlueprintType)
 enum class EMonitorScreen : uint8
 {
 	Empty,
 	RequestPermission,
-	CameraView
+	CameraView,
+	CharDetails
 };
 
 UCLASS()
@@ -25,7 +28,13 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Monitor")
 	void ShowScreen(EMonitorScreen Screen);
 
+	UFUNCTION(BlueprintCallable, Category = "Monitor")
+	void UpdateCharacterInfo(const FPassengerRecord& Record);
+
 protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidgetOptional))
 	TObjectPtr<UWidgetSwitcher> ScreenSwitcher;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidgetOptional))
+	TObjectPtr<UCharacterInformationWidget> CharacterInfoWidget;
 };

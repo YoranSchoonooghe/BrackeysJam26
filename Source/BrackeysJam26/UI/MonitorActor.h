@@ -23,6 +23,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Monitor")
 	void ShowScreen(EMonitorScreen Screen);
 
+	UFUNCTION(BlueprintCallable, Category = "Monitor")
+	void UpdateCharacterInfo(const FPassengerRecord& Record);
+
 	UFUNCTION(BlueprintCallable, Category = "Camera")
 	void BlendToTargetCamera();
 

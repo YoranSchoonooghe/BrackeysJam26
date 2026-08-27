@@ -51,6 +51,9 @@ struct FPassengerRecord
 	FPassengerData PresentedPassport;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FTicketData TrueTicket;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FTicketData PresentedTicket;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
