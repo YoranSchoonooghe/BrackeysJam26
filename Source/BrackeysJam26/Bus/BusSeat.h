@@ -28,6 +28,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<UWidgetComponent> InfoButtonWidget;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Camera Shake")
+	TSubclassOf<UCameraShakeBase> EjectShakeClass;
+
 public:
 	//virtual void Tick(float DeltaTime) override;
 
@@ -54,6 +57,8 @@ public:
 	FOnPassengerEjected OnPassengerEjected;
 
 private:
+	void ShakeCamera();
+
 	ANPCCharacter* Occupant;
 
 };

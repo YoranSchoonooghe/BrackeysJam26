@@ -83,6 +83,7 @@ void ABusSeat::Eject()
 
 		Occupant = nullptr;
 
+		ShakeCamera();
 		OnPassengerEjected.Broadcast();
 	}
 }
@@ -94,6 +95,17 @@ void ABusSeat::ShowCharacterInfo()
 	if (auto* PC = Cast<ADefaultPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0)))
 	{
 		PC->ShowCharacterInfoWidget(Occupant->PassengerRecord);
+	}
+}
+
+void ABusSeat::ShakeCamera()
+{
+	if (auto* PC = Cast<ADefaultPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0)))
+	{
+		if (PC->IsLocalController() && EjectShakeClass)
+		{
+			PC->ClientStartCameraShake(EjectShakeClass, 1.0f);
+		}
 	}
 }
 
