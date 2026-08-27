@@ -38,7 +38,7 @@ void ABus::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	SetPassengerDocsVisibility(false);
+	SetPassengerDocsVisibility(false, false);
 
 	OnOpenDoors.Broadcast();
 
@@ -89,7 +89,7 @@ void ABus::SetRoofVisibility(bool visible)
 	RoofMesh->SetCollisionEnabled(visible ? ECollisionEnabled::QueryAndPhysics : ECollisionEnabled::NoCollision);
 }
 
-void ABus::SetPassengerDocsVisibility(bool bVisible)
+void ABus::SetPassengerDocsVisibility(bool bVisible, bool bSendEvent)
 {
 	if (IDActor)
 	{
@@ -101,6 +101,11 @@ void ABus::SetPassengerDocsVisibility(bool bVisible)
 	{
 		TicketActor->SetActorHiddenInGame(!bVisible);
 		TicketActor->SetActorEnableCollision(bVisible);
+	}
+
+	if (bSendEvent)
+	{
+		OnDocsVisibilityChanged.Broadcast();
 	}
 }
 

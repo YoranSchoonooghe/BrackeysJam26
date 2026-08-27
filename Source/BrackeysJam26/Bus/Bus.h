@@ -65,7 +65,7 @@ public:
 	void SetRoofVisibility(bool visible);
 
 	UFUNCTION(BlueprintCallable, Category = "Passenger Docs")
-	void SetPassengerDocsVisibility(bool bVisible);
+	void SetPassengerDocsVisibility(bool bVisible, bool bSendEvent = true);
 
 	UFUNCTION(BlueprintCallable, Category = "Bus|Documents")
 	void UpdatePassengerDocs(const FPassengerRecord& Record);
@@ -79,6 +79,10 @@ public:
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnBusCloseDoors);
 	UPROPERTY(BlueprintAssignable, Category = "Bus")
 	FOnBusCloseDoors OnCloseDoors;
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDocsVisibilityChanged);
+	UPROPERTY(BlueprintAssignable, Category = "Bus")
+	FOnDocsVisibilityChanged OnDocsVisibilityChanged;
 
 private:
 	UFUNCTION()
