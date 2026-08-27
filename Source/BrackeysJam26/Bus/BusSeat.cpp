@@ -60,6 +60,8 @@ void ABusSeat::Eject()
 		EjectButtonWidget->SetVisibility(false);
 		
 		Occupant = nullptr;
+
+		OnPassengerEjected.Broadcast();
 	}
 }
 
