@@ -58,6 +58,14 @@ void ANPCCharacter::ChangeState(ENPCState NewState)
 	if (NPCState == ENPCState::Sitting)
 	{
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+		GetCharacterMovement()->DisableMovement();
+
+		if (CurrentSeat)
+		{
+			FAttachmentTransformRules AttachRules(EAttachmentRule::KeepWorld, false);
+			AttachToActor(CurrentSeat, AttachRules);
+		}
 	}
 }
 
@@ -94,6 +102,37 @@ void ANPCCharacter::SetHighlighted(bool bHighlighted)
 	}
 }
 
+void ANPCCharacter::RandomizeRaceAndVisuals()
+{
+	if (RaceVisuals.IsEmpty())
+	{
+		return;
+	}
+
+	TArray<ENPCRace> AvailableRaces;
+	RaceVisuals.GetKeys(AvailableRaces);
+
+	int32 RandomIndex = FMath::RandRange(0, AvailableRaces.Num() - 1);
+	ENPCRace SelectedRace = AvailableRaces[RandomIndex];
+
+	FNPCModelData SelectedData = RaceVisuals[SelectedRace];
+
+	if (SelectedData.RaceMesh)
+	{
+		GetMesh()->SetSkeletalMesh(SelectedData.RaceMesh);
+	}
+
+	if (SelectedData.RaceMaterial)
+	{
+		GetMesh()->SetMaterial(0, SelectedData.RaceMaterial);
+	}
+
+	if (SelectedData.RaceAnimBP)
+	{
+		GetMesh()->SetAnimInstanceClass(SelectedData.RaceAnimBP);
+	}
+}
+
 void ANPCCharacter::AssignSeat()
 {
 	auto* Bus = Cast<ABus>(UGameplayStatics::GetActorOfClass(GetWorld(), ABus::StaticClass()));
@@ -122,6 +161,9 @@ bool ANPCCharacter::Eject(float Force)
 		CurrentSeat->Leave();
 		CurrentSeat = nullptr;
 	}
+
+	FDetachmentTransformRules DetachRules(EDetachmentRule::KeepWorld, false);
+	DetachFromActor(DetachRules);
 
 	const FVector launchDirection = FMath::VRandCone(FVector::UpVector, FMath::DegreesToRadians(20.0f));
 

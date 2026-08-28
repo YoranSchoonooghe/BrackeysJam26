@@ -11,6 +11,9 @@
 #include "BrackeysJam26/Components/InspectionComponent.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/WidgetComponent.h"
+#include "BrackeysJam26/Bus/Bus.h"
+#include "Kismet/GameplayStatics.h"
+
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -51,6 +54,11 @@ void APlayerCharacter::BeginPlay()
 		WidgetInteraction->InteractionDistance = InteractRange;
 	}
 
+	if (AActor* BusActor = UGameplayStatics::GetActorOfClass(GetWorld(), ABus::StaticClass()))
+	{
+		FAttachmentTransformRules AttachRules(EAttachmentRule::KeepWorld, false);
+		AttachToActor(BusActor, AttachRules);
+	}
 
 	//if (HUDWidget)
 	//{

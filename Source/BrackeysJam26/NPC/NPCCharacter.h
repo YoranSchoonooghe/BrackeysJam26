@@ -66,6 +66,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	FPassengerRecord PassengerRecord;
 
+	UPROPERTY(EditDefaultsOnly, Category = "NPC|Visuals")
+	TMap<ENPCRace, FNPCModelData> RaceVisuals;
+
+	UFUNCTION(BlueprintCallable, Category = "NPC|Visuals")
+	void RandomizeRaceAndVisuals();
+
 private:
 	void AssignSeat();
 

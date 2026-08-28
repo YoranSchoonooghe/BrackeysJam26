@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "DataManager.generated.h"
 
+class UAnimInstance;
+
 USTRUCT(BlueprintType)
 struct FPassengerData
 {
@@ -22,6 +24,9 @@ struct FPassengerData
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString DOB;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TObjectPtr<UTexture2D> PassengerPhoto;
 };
 
 USTRUCT(BlueprintType)
@@ -58,6 +63,36 @@ struct FPassengerRecord
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsImposter = false;
+};
+
+UENUM(BlueprintType)
+enum class ENPCRace : uint8
+{
+	Raccoon       UMETA(DisplayName = "Raccoon"),
+	Bear         UMETA(DisplayName = "Bear"),
+	Craw         UMETA(DisplayName = "Craw"),
+	Dog         UMETA(DisplayName = "Dog"),
+	Fox         UMETA(DisplayName = "Fox"),
+	Rabbit         UMETA(DisplayName = "Rabbit"),
+	Squirrel         UMETA(DisplayName = "Squirrel")
+};
+
+USTRUCT(BlueprintType)
+struct FNPCModelData
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<USkeletalMesh> RaceMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UMaterialInterface> RaceMaterial;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UTexture2D> IDPhoto;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<UAnimInstance> RaceAnimBP;
 };
 
 UCLASS()

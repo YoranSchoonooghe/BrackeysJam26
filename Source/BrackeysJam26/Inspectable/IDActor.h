@@ -7,6 +7,8 @@
 #include "IDActor.generated.h"
 
 class UTextRenderComponent;
+class UWidgetComponent;
+class UTexture2D;
 
 UCLASS()
 class BRACKEYSJAM26_API AIDActor : public AActor, public IInspectableInterface
@@ -29,6 +31,12 @@ protected:
 	TObjectPtr<UTextRenderComponent> DateOfBirthText;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<UTextRenderComponent> IDNumberText;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	TObjectPtr<UWidgetComponent> PhotoWidget;
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "ID")
+	void UpdatePhotoUI(UTexture2D* NewPhoto);
 
 public:	
 	//virtual void Tick(float DeltaTime) override;

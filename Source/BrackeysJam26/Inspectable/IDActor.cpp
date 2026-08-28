@@ -1,5 +1,6 @@
 #include "IDActor.h"
 #include "Components/TextRenderComponent.h"
+#include "Components/WidgetComponent.h"
 
 AIDActor::AIDActor()
 {
@@ -22,6 +23,9 @@ AIDActor::AIDActor()
 
 	IDNumberText = CreateDefaultSubobject<UTextRenderComponent>(TEXT("IDNumber"));
 	IDNumberText->SetupAttachment(RootComponent);
+
+	PhotoWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("PhotoWidget"));
+	PhotoWidget->SetupAttachment(RootComponent);
 
 	FirstNameText->SetText(FText::FromString(TEXT("JOHN")));
 	LastNameText->SetText(FText::FromString(TEXT("DOE")));
@@ -48,4 +52,6 @@ void AIDActor::UpdateID(const FPassengerData& PassportData)
 	LastNameText->SetText(FText::FromString(PassportData.LastName));
 	DateOfBirthText->SetText(FText::FromString(PassportData.DOB));
 	IDNumberText->SetText(FText::FromString(PassportData.IDNumber));
+
+	UpdatePhotoUI(PassportData.PassengerPhoto);
 }
