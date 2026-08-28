@@ -80,6 +80,12 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Transient)
 	TObjectPtr<UUserWidget> HUDWidgetInstance;
 
+	UFUNCTION()
+	void OnBusDepart();
+
+	UFUNCTION()
+	void OnBusArrive();
+
 private:
 	void ClampLookAngle();
 	void UpdateHoveredNPC();

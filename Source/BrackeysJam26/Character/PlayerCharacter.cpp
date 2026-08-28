@@ -12,7 +12,9 @@
 #include "Blueprint/UserWidget.h"
 #include "Components/WidgetComponent.h"
 #include "BrackeysJam26/Bus/Bus.h"
+#include "BrackeysJam26/Bus/BusRouteManager.h"
 #include "Kismet/GameplayStatics.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 
 APlayerCharacter::APlayerCharacter()
@@ -56,8 +58,15 @@ void APlayerCharacter::BeginPlay()
 
 	if (AActor* BusActor = UGameplayStatics::GetActorOfClass(GetWorld(), ABus::StaticClass()))
 	{
-		FAttachmentTransformRules AttachRules(EAttachmentRule::KeepWorld, false);
+		FAttachmentTransformRules AttachRules(EAttachmentRule::KeepWorld, true);
 		AttachToActor(BusActor, AttachRules);
+
+		if (ABusRouteManager* RouteManager = Cast<ABusRouteManager>(
+			UGameplayStatics::GetActorOfClass(GetWorld(), ABusRouteManager::StaticClass())))
+		{
+			RouteManager->OnDepart.AddDynamic(this, &APlayerCharacter::OnBusDepart);
+			RouteManager->OnArrive.AddDynamic(this, &APlayerCharacter::OnBusArrive);
+		}
 	}
 
 	//if (HUDWidget)
@@ -373,4 +382,21 @@ void APlayerCharacter::ClampLookAngle()
 	controlRotation.Pitch = InitialControlPitch + relativePitch;
 
 	Controller->SetControlRotation(controlRotation);
+}
+
+void APlayerCharacter::OnBusDepart()
+{
+	if (UCharacterMovementComponent* CMC = GetCharacterMovement())
+	{
+		CMC->StopMovementImmediately();
+		CMC->SetMovementMode(MOVE_None);
+	}
+}
+
+void APlayerCharacter::OnBusArrive()
+{
+	if (UCharacterMovementComponent* CMC = GetCharacterMovement())
+	{
+		CMC->SetMovementMode(MOVE_Walking);
+	}
 }

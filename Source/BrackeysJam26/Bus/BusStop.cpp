@@ -30,12 +30,35 @@ void ABusStop::BeginPlay()
 
 FVector ABusStop::GetRandomSpawnPoint() const
 {
-	const FVector Extent = SpawnArea->GetScaledBoxExtent();
+	for (int32 Attempt = 0; Attempt < MaxSpawnAttempts; ++Attempt)
+	{
+		const FVector Candidate = GetRandomPointInArea();
 
+		FCollisionQueryParams Params;
+		Params.AddIgnoredActor(this);
+
+		const bool bBlocked = GetWorld()->OverlapAnyTestByChannel(
+			Candidate,
+			FQuat::Identity,
+			ECC_Pawn,
+			FCollisionShape::MakeSphere(SpawnCheckRadius),
+			Params);
+
+		if (!bBlocked)
+		{
+			return Candidate;
+		}
+	}
+
+	return SpawnArea->GetComponentLocation();
+}
+
+FVector ABusStop::GetRandomPointInArea() const
+{
+	const FVector Extent = SpawnArea->GetScaledBoxExtent();
 	const FVector RandomLocalOffset(
 		FMath::FRandRange(-Extent.X, Extent.X),
 		FMath::FRandRange(-Extent.Y, Extent.Y),
 		FMath::FRandRange(-Extent.Z, Extent.Z));
-
 	return SpawnArea->GetComponentTransform().TransformPosition(RandomLocalOffset);
 }

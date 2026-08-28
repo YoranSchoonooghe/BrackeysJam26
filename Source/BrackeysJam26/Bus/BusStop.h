@@ -32,4 +32,13 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Visuals")
 	TArray<TSubclassOf<AActor>> BusStopBlueprints;
+
+
+	FVector GetRandomPointInArea() const;
+
+	UPROPERTY(EditAnywhere, Category = "Spawning")
+	float SpawnCheckRadius = 34.0f;
+
+	UPROPERTY(EditAnywhere, Category = "Spawning")
+	int32 MaxSpawnAttempts = 10;
 };

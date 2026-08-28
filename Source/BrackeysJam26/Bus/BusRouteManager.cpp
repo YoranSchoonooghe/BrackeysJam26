@@ -51,7 +51,7 @@ FString ABusRouteManager::GetFormattedTimeRemaining()
 
 void ABusRouteManager::PerformTeleport()
 {
-	CurrentStopIndex++;
+	
 
 	if (DataManagerReference)
 	{
@@ -77,6 +77,7 @@ void ABusRouteManager::PerformTeleport()
 		}
 	}
 
+	CurrentStopIndex++;
 	AddStopBonusTime();
 }
 
@@ -115,9 +116,12 @@ void ABusRouteManager::Tick(float DeltaTime)
 		{
 			PerformTeleport();
 
-			CurrentState = ETransitionState::Loading;
-			CurrentLoadTime = 0.0f;
-			BP_ToggleLoadingImage(true);
+			if (CurrentState != ETransitionState::Idle)
+			{
+				CurrentState = ETransitionState::Loading;
+				CurrentLoadTime = 0.0f;
+				BP_ToggleLoadingImage(true);
+			}
 		}
 	}
 	else if (CurrentState == ETransitionState::Loading)
