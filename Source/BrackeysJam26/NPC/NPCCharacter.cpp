@@ -104,17 +104,13 @@ void ANPCCharacter::SetHighlighted(bool bHighlighted)
 
 void ANPCCharacter::RandomizeRaceAndVisuals()
 {
-	if (RaceVisuals.IsEmpty())
-	{
-		return;
-	}
+	if (RaceVisuals.IsEmpty()) return;
 
 	TArray<ENPCRace> AvailableRaces;
 	RaceVisuals.GetKeys(AvailableRaces);
 
 	int32 RandomIndex = FMath::RandRange(0, AvailableRaces.Num() - 1);
 	ENPCRace SelectedRace = AvailableRaces[RandomIndex];
-
 	FNPCModelData SelectedData = RaceVisuals[SelectedRace];
 
 	if (SelectedData.RaceMesh)
@@ -122,14 +118,20 @@ void ANPCCharacter::RandomizeRaceAndVisuals()
 		GetMesh()->SetSkeletalMesh(SelectedData.RaceMesh);
 	}
 
-	if (SelectedData.RaceMaterial)
+	if (!SelectedData.FaceVariations.IsEmpty())
 	{
-		GetMesh()->SetMaterial(0, SelectedData.RaceMaterial);
-	}
+		int32 RandomFace = FMath::RandRange(0, SelectedData.FaceVariations.Num() - 1);
+		FFaceVariation SelectedFace = SelectedData.FaceVariations[RandomFace];
 
-	if (SelectedData.RaceAnimBP)
-	{
-		GetMesh()->SetAnimInstanceClass(SelectedData.RaceAnimBP);
+		if (SelectedFace.FaceMaterial)
+		{
+			GetMesh()->SetMaterial(1, SelectedFace.FaceMaterial);
+		}
+
+		if (SelectedFace.IDPhoto)
+		{
+			PassengerRecord.PresentedPassport.PassengerPhoto = SelectedFace.IDPhoto;
+		}
 	}
 }
 

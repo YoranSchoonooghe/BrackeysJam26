@@ -78,6 +78,18 @@ enum class ENPCRace : uint8
 };
 
 USTRUCT(BlueprintType)
+struct FFaceVariation
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UMaterialInterface> FaceMaterial;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UTexture2D> IDPhoto;
+};
+
+USTRUCT(BlueprintType)
 struct FNPCModelData
 {
 	GENERATED_BODY()
@@ -86,13 +98,7 @@ struct FNPCModelData
 	TObjectPtr<USkeletalMesh> RaceMesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UMaterialInterface> RaceMaterial;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UTexture2D> IDPhoto;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<UAnimInstance> RaceAnimBP;
+	TArray<FFaceVariation> FaceVariations;
 };
 
 UCLASS()
