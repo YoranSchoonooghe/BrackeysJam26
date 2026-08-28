@@ -2,6 +2,7 @@
 
 #include "BusStop.h"
 #include "Components/BoxComponent.h"
+#include "Components/ChildActorComponent.h"
 
 ABusStop::ABusStop()
 {
@@ -11,6 +12,20 @@ ABusStop::ABusStop()
 	RootComponent = SpawnArea;
 	SpawnArea->SetBoxExtent(FVector(200.0f, 200.0f, 50.0f));
 	SpawnArea->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	VisualBusStop = CreateDefaultSubobject<UChildActorComponent>(TEXT("VisualBusStop"));
+	VisualBusStop->SetupAttachment(RootComponent);
+}
+
+void ABusStop::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (!BusStopBlueprints.IsEmpty())
+	{
+		int32 RandomIndex = FMath::RandRange(0, BusStopBlueprints.Num() - 1);
+		VisualBusStop->SetChildActorClass(BusStopBlueprints[RandomIndex]);
+	}
 }
 
 FVector ABusStop::GetRandomSpawnPoint() const

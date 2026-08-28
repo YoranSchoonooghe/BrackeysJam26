@@ -7,6 +7,7 @@
 #include "BusStop.generated.h"
 
 class UBoxComponent;
+class UChildActorComponent;
 
 UCLASS()
 class BRACKEYSJAM26_API ABusStop : public AActor
@@ -20,6 +21,15 @@ public:
 	FVector GetRandomSpawnPoint() const;
 
 protected:
+
+	virtual void BeginPlay() override;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<UBoxComponent> SpawnArea;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	TObjectPtr<UChildActorComponent> VisualBusStop;
+
+	UPROPERTY(EditAnywhere, Category = "Visuals")
+	TArray<TSubclassOf<AActor>> BusStopBlueprints;
 };
