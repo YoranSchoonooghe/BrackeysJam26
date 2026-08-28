@@ -21,7 +21,7 @@ void ANPCCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
-
+	RandomizeRaceAndVisuals();
 }
 
 //void ANPCCharacter::Tick(float DeltaTime)
