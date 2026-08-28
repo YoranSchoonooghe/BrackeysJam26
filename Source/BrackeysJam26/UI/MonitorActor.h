@@ -37,6 +37,10 @@ public:
 
 	virtual void Interact_Implementation() override;
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMonitorOpened);
+	UPROPERTY(BlueprintAssignable, Category = "Monitor")
+	FOnMonitorOpened OnMonitorOpened;
+
 private:
 	void SetSeatButtonsVisible(bool bVisible);
 

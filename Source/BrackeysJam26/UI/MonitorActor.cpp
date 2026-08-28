@@ -97,6 +97,8 @@ void AMonitorActor::Interact_Implementation()
 	}
 
 	ScreenWidgetComponent->SetVisibility(true);
+
+	OnMonitorOpened.Broadcast();
 }
 
 void AMonitorActor::Close()
