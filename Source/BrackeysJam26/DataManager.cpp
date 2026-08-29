@@ -190,7 +190,7 @@ FString ADataManager::GetStopNameByIndex(int32 Index)
 {
 	if (ActiveRoute.IsValidIndex(Index))
 	{
-		return TEXT("Next stop: ") + ActiveRoute[Index];
+		return TEXT("Current stop: ") + ActiveRoute[Index];
 	}
 	return TEXT("Final Destination");
 }
@@ -199,23 +199,31 @@ void ADataManager::GenerateActiveRoute()
 {
 	ActiveRoute.Empty();
 
-	TArray<FString> ShuffledStops = BusStopNames;
-
-	for (int i = ShuffledStops.Num() - 1; i > 0; i--)
+	TArray<FString> CleanStops;
+	for (const FString& Stop : BusStopNames)
 	{
-		int32 SwapIndex = FMath::RandRange(0, i);
-		ShuffledStops.Swap(i, SwapIndex);
+		FString CleanedName = Stop.TrimStartAndEnd();
+		if (!CleanedName.IsEmpty() && !CleanStops.Contains(CleanedName))
+		{
+			CleanStops.Add(CleanedName);
+		}
 	}
 
-	int32 StopsToPick = FMath::Min(NumberOfStops, ShuffledStops.Num());
+	for (int i = CleanStops.Num() - 1; i > 0; i--)
+	{
+		int32 SwapIndex = FMath::RandRange(0, i);
+		CleanStops.Swap(i, SwapIndex);
+	}
+
+	int32 StopsToPick = FMath::Min(NumberOfStops, CleanStops.Num());
 
 	for (int i = 0; i < StopsToPick; i++)
 	{
-		ActiveRoute.Add(ShuffledStops[i]);
+		ActiveRoute.Add(CleanStops[i]);
 	}
 }
 
-TArray<FPassengerRecord> ADataManager::GeneratePassengerQueue(int32 TotalPassengers, int32 MinImposters, int32 MaxImposters)
+TArray<FPassengerRecord> ADataManager::GeneratePassengerQueue(int32 TotalPassengers, int32 MinImposters, int32 MaxImposters, int32 CurrentStopIndex)
 {
 	TArray<FPassengerRecord> DailyQueue;
 
@@ -226,7 +234,7 @@ TArray<FPassengerRecord> ADataManager::GeneratePassengerQueue(int32 TotalPasseng
 	{
 		FPassengerRecord NewRecord;
 		NewRecord.TrueIdentity = GenerateRandomPassenger();
-		NewRecord.TrueTicket = GenerateValidTicket();
+		NewRecord.TrueTicket = GenerateValidTicket(CurrentStopIndex);
 
 		if (CurrentImposters < TargetImposters)
 		{
@@ -264,27 +272,26 @@ TArray<FPassengerRecord> ADataManager::GeneratePassengerQueue(int32 TotalPasseng
 	return DailyQueue;
 }
 
-FTicketData ADataManager::GenerateValidTicket()
+FTicketData ADataManager::GenerateValidTicket(int32 CurrentStopIndex)
 {
 	FTicketData NewTicket;
 
 	NewTicket.TicketDate = CurrentGameDate;
 
-	if (ActiveRoute.Num() >= 2)
+	if (ActiveRoute.IsValidIndex(CurrentStopIndex))
 	{
-		int IndexA = FMath::RandRange(0, ActiveRoute.Num() - 1);
-		int IndexB = FMath::RandRange(0, ActiveRoute.Num() - 1);
+		NewTicket.BoardingStop = ActiveRoute[CurrentStopIndex];
 
-		while (IndexA == IndexB)
+		int32 MaxIndex = ActiveRoute.Num() - 1;
+
+		if (CurrentStopIndex < MaxIndex)
 		{
-			IndexB = FMath::RandRange(0, ActiveRoute.Num() - 1);
+			NewTicket.FinalStop = ActiveRoute[MaxIndex];
 		}
-
-		int32 BoardingIndex = FMath::Min(IndexA, IndexB);
-		int32 FinalIndex = FMath::Max(IndexA, IndexB);
-
-		NewTicket.BoardingStop = ActiveRoute[BoardingIndex];
-		NewTicket.FinalStop = ActiveRoute[FinalIndex];
+		else
+		{
+			NewTicket.FinalStop = TEXT("Terminal");
+		}
 	}
 	else
 	{

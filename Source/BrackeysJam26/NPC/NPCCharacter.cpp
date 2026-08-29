@@ -136,6 +136,11 @@ void ANPCCharacter::RandomizeRaceAndVisuals()
 		{
 			GetMesh()->SetMaterial(1, SelectedFace.FaceMaterial);
 		}
+
+		if (SelectedFace.IDPhoto)
+		{
+			PassengerRecord.TrueIdentity.PassengerPhoto = SelectedFace.IDPhoto;
+		}
 	}
 
 	bool bDidAssignPhoto = false;

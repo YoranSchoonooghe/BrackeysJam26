@@ -173,8 +173,17 @@ void ABusRouteManager::Tick(float DeltaTime)
 
 		if (CurrentLoadTime >= LoadingScreenDuration)
 		{
-			CurrentState = ETransitionState::Arriving;
 			BP_ToggleLoadingImage(false);
+
+			if (CurrentStopIndex >= TeleportPoints.Num())
+			{
+				CurrentState = ETransitionState::Idle;
+				EvaluateEndGame();
+			}
+			else
+			{
+				CurrentState = ETransitionState::Arriving;
+			}
 		}
 	}
 	else if (CurrentState == ETransitionState::Arriving)

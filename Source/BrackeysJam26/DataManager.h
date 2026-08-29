@@ -151,10 +151,10 @@ public:
 	void GenerateActiveRoute();
 
 	UFUNCTION(BlueprintCallable, Category = "Data|Generation")
-	TArray<FPassengerRecord> GeneratePassengerQueue(int32 TotalPassengers, int32 MinImposters, int32 MaxImposters);
+	TArray<FPassengerRecord> GeneratePassengerQueue(int32 TotalPassengers, int32 MinImposters, int32 MaxImposters, int32 CurrentStopIndex);
 
 	UFUNCTION(BlueprintCallable, Category = "Data|Generation")
-	FTicketData GenerateValidTicket();
+	FTicketData GenerateValidTicket(int32 CurrentStopIndex);
 
 	UFUNCTION(BlueprintCallable, Category = "Data|Generation")
 	FTicketData GenerateFakeTicket(FTicketData ValidTicket);

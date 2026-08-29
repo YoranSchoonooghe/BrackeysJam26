@@ -5,6 +5,7 @@
 #include "BrackeysJam26/Bus/Bus.h"
 #include "BrackeysJam26/Bus/BusStop.h"
 #include "BrackeysJam26/DataManager.h"
+#include <BrackeysJam26/Bus/BusRouteManager.h>
 
 UBusQueueComponent::UBusQueueComponent()
 {
@@ -40,17 +41,24 @@ void UBusQueueComponent::SpawnPassengersForStop(ABusStop* Stop)
 
 	auto* Bus = Cast<ABus>(GetOwner());
 
-	const int32 PassengerCount = FMath::RandRange(MinPassengers, MaxPassengers);
+	const int32 PassengerCount = FMath::RandRange(2, 5);
 
 	TArray<FPassengerRecord> GeneratedQueue;
 	ADataManager* DataManager = Cast<ADataManager>(UGameplayStatics::GetActorOfClass(GetWorld(), ADataManager::StaticClass()));
 
 	if (DataManager)
 	{
-		int32 MinImposters = 0;
-		int32 MaxImposters = FMath::Clamp(PassengerCount / 2, 0, PassengerCount);
+		int32 MinImposters = 1;
+		int32 MaxImposters = FMath::Clamp(PassengerCount / 2, 1, PassengerCount);
 
-		GeneratedQueue = DataManager->GeneratePassengerQueue(PassengerCount, MinImposters, MaxImposters);
+		int32 StopIdx = 0;
+		if (auto* RouteManager = Cast<ABusRouteManager>(UGameplayStatics::GetActorOfClass(GetWorld(), ABusRouteManager::StaticClass())))
+		{
+			StopIdx = RouteManager->CurrentStopIndex;
+		}
+
+		// Pass StopIdx into the generato
+		GeneratedQueue = DataManager->GeneratePassengerQueue(PassengerCount, MinImposters, MaxImposters, StopIdx);
 	}
 
 	FActorSpawnParameters SpawnParams;
