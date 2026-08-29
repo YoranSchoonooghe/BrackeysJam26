@@ -19,6 +19,7 @@ void UMenuFlowSubsystem::SetRootState(TSubclassOf<UMenuStateBase> StateClass)
 	StateStack.Add(NewObject<UMenuStateBase>(this, StateClass));
 
 	GetCurrentState()->EnterState(this);
+	BroadcastCurrentState();
 }
 
 void UMenuFlowSubsystem::PushState(TSubclassOf<UMenuStateBase> StateClass)
@@ -36,6 +37,7 @@ void UMenuFlowSubsystem::PushState(TSubclassOf<UMenuStateBase> StateClass)
 	StateStack.Add(NewObject<UMenuStateBase>(this, StateClass));
 
 	GetCurrentState()->EnterState(this);
+	BroadcastCurrentState();
 }
 
 void UMenuFlowSubsystem::PopState()
@@ -49,6 +51,7 @@ void UMenuFlowSubsystem::PopState()
 	StateStack.Pop();
 
 	GetCurrentState()->EnterState(this);
+	BroadcastCurrentState();
 }
 
 void UMenuFlowSubsystem::RequestBack()
@@ -68,6 +71,14 @@ void UMenuFlowSubsystem::RequestBack()
 UMenuStateBase* UMenuFlowSubsystem::GetCurrentState() const
 {
 	return StateStack.Num() > 0 ? StateStack.Last() : nullptr;
+}
+
+void UMenuFlowSubsystem::BroadcastCurrentState()
+{
+	if (UMenuStateBase* Current = GetCurrentState())
+	{
+		OnMenuStateChanged.Broadcast(Current->GetClass());
+	}
 }
 
 APlayerController* UMenuFlowSubsystem::GetFirstPlayerController() const

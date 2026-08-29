@@ -7,6 +7,8 @@
 class UMenuStateBase;
 class APlayerController;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMenuStateChanged, TSubclassOf<UMenuStateBase>, NewStateClass);
+
 UCLASS()
 class BRACKEYSJAM26_API UMenuFlowSubsystem : public UGameInstanceSubsystem
 {
@@ -30,7 +32,12 @@ public:
 
 	APlayerController* GetFirstPlayerController() const;
 
+	UPROPERTY(BlueprintAssignable, Category = "Menu Flow")
+	FOnMenuStateChanged OnMenuStateChanged;
+
 private:
 	UPROPERTY()
 	TArray<TObjectPtr<UMenuStateBase>> StateStack;
+
+	void BroadcastCurrentState();
 };
