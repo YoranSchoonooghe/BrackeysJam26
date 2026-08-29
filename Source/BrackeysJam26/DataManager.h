@@ -161,6 +161,4 @@ public:
 
 private:
 	FString GenerateTypo(FString OriginalText);
-
-	void LoadTextFileIntoArray(FString FileName, TArray<FString>& OutArray);
 };

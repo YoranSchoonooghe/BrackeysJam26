@@ -2,34 +2,84 @@
 
 
 #include "DataManager.h"
-#include "Misc/FileHelper.h"
-#include "Misc/Paths.h"
 #include "Math/UnrealMathUtility.h"
+
+namespace
+{
+	const TArray<FString>& GetFallbackFirstNames()
+	{
+		static const TArray<FString> Names = {
+			TEXT("Axel"), TEXT("Raven"), TEXT("Salem"), TEXT("Blair"), TEXT("Eden"), TEXT("Sage"), TEXT("Nova"),
+			TEXT("River"), TEXT("Storm"), TEXT("Skye"), TEXT("Quinn"), TEXT("Darcy"), TEXT("Reese"), TEXT("Juno"),
+			TEXT("Cleo"), TEXT("Remy"), TEXT("Ezra"), TEXT("Zion"), TEXT("Vale"), TEXT("Gray"), TEXT("Mara"),
+			TEXT("Iris"), TEXT("Vera"), TEXT("Elias"), TEXT("Silas"), TEXT("Nolan"), TEXT("Daria"), TEXT("Elian"),
+			TEXT("Ariel"), TEXT("Roman"), TEXT("Nadia"), TEXT("Soren"), TEXT("Livia"), TEXT("Orion"), TEXT("Gary"),
+			TEXT("Boris"), TEXT("Michael"), TEXT("Arlen"), TEXT("Ansel"), TEXT("Elio"), TEXT("Ivo"), TEXT("Oren"),
+			TEXT("Orin"), TEXT("Remy"), TEXT("Soren"), TEXT("Vex"), TEXT("Rune"), TEXT("Echo"), TEXT("Zero"),
+			TEXT("Seven"), TEXT("Salem"), TEXT("Nyx"), TEXT("Lux"), TEXT("Vale"), TEXT("Fable"), TEXT("Onyx"),
+			TEXT("Astra"), TEXT("Nova"), TEXT("Sol"), TEXT("Mars"), TEXT("Eden"), TEXT("Halo"), TEXT("Peter"),
+			TEXT("Carl"), TEXT("Mark"), TEXT("Luke"), TEXT("Stefan"), TEXT("Tomas"), TEXT("Arthur"), TEXT("Amanda"),
+			TEXT("Helen"), TEXT("Leah"), TEXT("Leon")
+		};
+		return Names;
+	}
+
+	const TArray<FString>& GetFallbackLastNames()
+	{
+		static const TArray<FString> Names = {
+			TEXT("Miller"), TEXT("Carter"), TEXT("Walker"), TEXT("Foster"), TEXT("Parker"), TEXT("Turner"),
+			TEXT("Cooper"), TEXT("Baker"), TEXT("Morgan"), TEXT("Hunter"), TEXT("Wilson"), TEXT("Palmer"),
+			TEXT("Harris"), TEXT("Mason"), TEXT("Brooks"), TEXT("Bennett"), TEXT("Collins"), TEXT("Murphy"),
+			TEXT("Dawson"), TEXT("Mercer"), TEXT("Novak"), TEXT("Kowal"), TEXT("Urban"), TEXT("Marek"),
+			TEXT("Varga"), TEXT("Horvat"), TEXT("Novak"), TEXT("Kolar"), TEXT("Jovan"), TEXT("Petrov"),
+			TEXT("Volkov"), TEXT("Moroz"), TEXT("Kozak"), TEXT("Orlov"), TEXT("Zoric"), TEXT("Markov"),
+			TEXT("Pavlov"), TEXT("Sokol"), TEXT("Drago"), TEXT("Vitek"), TEXT("Jackson"), TEXT("Fisher"),
+			TEXT("Adams"), TEXT("Ford"), TEXT("Ellis"), TEXT("Gray"), TEXT("Scott"), TEXT("Ross"), TEXT("Smith"),
+			TEXT("Young"), TEXT("Reed"), TEXT("Green"), TEXT("Ramsey"), TEXT("Preston"), TEXT("Körgsen")
+		};
+		return Names;
+	}
+
+	const TArray<FString>& GetFallbackBusStops()
+	{
+		static const TArray<FString> Stops = {
+			TEXT("Bad Idea"), TEXT("Don't Look"), TEXT("Welcome Back"), TEXT("You Again"), TEXT("No Exit"),
+			TEXT("The Void"), TEXT("Gary St"), TEXT("Lost St"), TEXT("Loop St"), TEXT("Again St"),
+			TEXT("Same Place"), TEXT("Old Stop"), TEXT("Last Bus"), TEXT("Bus Stop?"), TEXT("Why 13?"),
+			TEXT("Not Again"), TEXT("Same Again"), TEXT("You Know"), TEXT("Remember?"), TEXT("???"),
+			TEXT("Unknown"), TEXT("Nowhere"), TEXT("Somewhere"), TEXT("Elsewhere"), TEXT("The Void"),
+			TEXT("No Name"), TEXT("Secret St"), TEXT("Hidden St"), TEXT("It Saw You"), TEXT("You Again"),
+			TEXT("Wrong Stop"), TEXT("Last Stop"), TEXT("No Exit"), TEXT("Dead End"), TEXT("Bad Place"),
+			TEXT("Dark Road"), TEXT("Empty Road"), TEXT("Lost Town"), TEXT("Ghost St"), TEXT("Dead St"),
+			TEXT("Quiet St"), TEXT("Silent St"), TEXT("No One Here"), TEXT("Stay Inside"), TEXT("Don't Look"),
+			TEXT("Don't Stop"), TEXT("Turn Back"), TEXT("No Way"), TEXT("Go Away"), TEXT("Not Here"),
+			TEXT("Wrong Way"), TEXT("Sunshine Park"), TEXT("Hedge stop"), TEXT("The empty nest"),
+			TEXT("Empty Lane"), TEXT("Livingstone"), TEXT("Deadstone"), TEXT("Bus Stopn't"), TEXT("Area 51½"),
+			TEXT("Your Stop"), TEXT("Bro What's That"), TEXT("Swear It's Safe"), TEXT("Don't Ask"),
+			TEXT("Don't Look"), TEXT("Don't Get Off"), TEXT("The Mistake"), TEXT("Oops"), TEXT("Oops Again"),
+			TEXT("Oh No"), TEXT("Oh No 2")
+		};
+		return Stops;
+	}
+}
 
 ADataManager::ADataManager()
 {
 	PrimaryActorTick.bCanEverTick = false;
+
+	FDateTime Today = FDateTime::Now();
+	CurrentGameDate = FString::Printf(TEXT("%04d-%02d-%02d"), Today.GetYear(), Today.GetMonth(), Today.GetDay());
+
+	FirstNames = GetFallbackFirstNames();
+	LastNames = GetFallbackLastNames();
+	BusStopNames = GetFallbackBusStops();
+
+	GenerateActiveRoute();
 }
 
 void ADataManager::BeginPlay()
 {
 	Super::BeginPlay();
-
-	FDateTime Today = FDateTime::Now();
-	CurrentGameDate = FString::Printf(TEXT("%04d-%02d-%02d"), Today.GetYear(), Today.GetMonth(), Today.GetDay());
-
-
-	LoadTextFileIntoArray(TEXT("FirstNames.txt"), FirstNames);
-	LoadTextFileIntoArray(TEXT("LastNames.txt"), LastNames);
-	LoadTextFileIntoArray(TEXT("BusStops.txt"), BusStopNames);
-
-	GenerateActiveRoute();
-}
-
-void ADataManager::LoadTextFileIntoArray(FString FileName, TArray<FString>& OutArray)
-{
-	FString FilePath = FPaths::ProjectContentDir() + TEXT("Data/") + FileName;
-	FFileHelper::LoadFileToStringArray(OutArray, *FilePath);
 }
 
 FPassengerData ADataManager::GenerateRandomPassenger()
