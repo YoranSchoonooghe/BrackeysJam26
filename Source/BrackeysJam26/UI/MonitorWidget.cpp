@@ -21,6 +21,6 @@ void UMonitorWidget::UpdateCharacterInfo(const FPassengerRecord& Record)
 {
 	if (CharacterInfoWidget)
 	{
-		CharacterInfoWidget->UpdateCharacterInformation(Record.TrueIdentity, Record.TrueTicket);
+		CharacterInfoWidget->UpdateCharacterInformation(Record.TrueIdentity, Record.TrueTicket, Record.TrueIdentity.PassengerPhoto);
 	}
 }
