@@ -23,4 +23,15 @@ void UMonitorWidget::UpdateCharacterInfo(const FPassengerRecord& Record)
 	{
 		CharacterInfoWidget->UpdateCharacterInformation(Record.TrueIdentity, Record.TrueTicket, Record.TrueIdentity.PassengerPhoto);
 	}
+
+	FString FirstName = Record.PresentedPassport.FirstName;
+	FString LastName = Record.PresentedPassport.LastName;
+
+	bool bIsMichael = FirstName.Equals(TEXT("Michael"), ESearchCase::IgnoreCase) || FirstName.Equals(TEXT("Micheal"), ESearchCase::IgnoreCase);
+	bool bIsJackson = LastName.Equals(TEXT("Jackson"), ESearchCase::IgnoreCase);
+
+	if (bIsMichael && bIsJackson)
+	{
+		BP_OnMichaelJacksonAppeared();
+	}
 }
