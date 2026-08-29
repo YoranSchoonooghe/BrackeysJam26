@@ -65,7 +65,7 @@ void ANPCCharacter::ChangeState(ENPCState NewState)
 
 	if (NPCState == ENPCState::Sitting)
 	{
-		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 
 		GetCharacterMovement()->DisableMovement();
 

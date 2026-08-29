@@ -17,16 +17,9 @@ void UMenuStateBase::EnterState(UMenuFlowSubsystem* Flow)
 	{
 		ActiveWidget = CreateWidget<UUserWidget>(PC, WidgetClass);
 
-		if (GEngine)
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green,
-				FString::Printf(TEXT("EnterState: PC=%s Widget=%s"),
-					PC ? TEXT("valid") : TEXT("NULL"),
-					ActiveWidget ? TEXT("valid") : TEXT("NULL")));
-		}
-
 		if (ActiveWidget)
 		{
+			ActiveWidget->SetIsFocusable(true);
 			ActiveWidget->AddToViewport();
 		}
 	}
@@ -43,9 +36,12 @@ void UMenuStateBase::EnterState(UMenuFlowSubsystem* Flow)
 
 	if (bShowsMouseCursor)
 	{
-		FInputModeUIOnly InputMode;
-		InputMode.SetWidgetToFocus(ActiveWidget->TakeWidget());
-		InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+		FInputModeGameAndUI InputMode;
+		InputMode.SetHideCursorDuringCapture(false);
+		if (ActiveWidget)
+		{
+			InputMode.SetWidgetToFocus(ActiveWidget->TakeWidget());
+		}
 		PC->SetInputMode(InputMode);
 	}
 	else
