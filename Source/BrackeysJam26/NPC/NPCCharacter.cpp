@@ -8,6 +8,7 @@
 #include "AIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include <Kismet/GameplayStatics.h>
+#include "BrackeysJam26/Bus/BusRouteManager.h"
 #include "BrackeysJam26/Components/ExpireComponent.h"
 
 ANPCCharacter::ANPCCharacter()
@@ -20,8 +21,6 @@ ANPCCharacter::ANPCCharacter()
 void ANPCCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	RandomizeRaceAndVisuals();
 }
 
 //void ANPCCharacter::Tick(float DeltaTime)
@@ -157,6 +156,14 @@ void ANPCCharacter::AssignSeat()
 bool ANPCCharacter::Eject(float Force)
 {
 	if (NPCState != ENPCState::Sitting) return false;
+
+	if (!PassengerRecord.bIsImposter)
+	{
+		if (auto* RouteManager = Cast<ABusRouteManager>(UGameplayStatics::GetActorOfClass(GetWorld(), ABusRouteManager::StaticClass())))
+		{
+			RouteManager->RealNPCsDenied++;
+		}
+	}
 
 	if (CurrentSeat)
 	{

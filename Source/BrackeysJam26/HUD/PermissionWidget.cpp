@@ -2,6 +2,7 @@
 #include <Kismet/GameplayStatics.h>
 #include "BrackeysJam26/Character/PlayerCharacter.h"
 #include "BrackeysJam26/NPC/NPCCharacter.h"
+#include "BrackeysJam26/Bus/BusRouteManager.h"
 #include "Components/Button.h"
 
 void UPermissionWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
@@ -43,6 +44,16 @@ void UPermissionWidget::DenyNPCFromBus()
 
 	auto* NPC = player->GetTargetNPC();
 	if (!NPC) return;
+
+	if (!NPC->PassengerRecord.bIsImposter)
+	{
+		if (auto* RouteManager = Cast<ABusRouteManager>(UGameplayStatics::GetActorOfClass(GetWorld(), ABusRouteManager::StaticClass())))
+		{
+			RouteManager->RealNPCsDenied++;
+		}
+	}
+
+
 	NPC->ChangeState(ENPCState::ExitBus);
 
 	OnPassengerDenied.Broadcast();

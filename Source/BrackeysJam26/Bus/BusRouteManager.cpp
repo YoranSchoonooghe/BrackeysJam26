@@ -5,6 +5,7 @@
 #include "../Components/BusQueueComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "BrackeysJam26/Character/PlayerCharacter.h"
+#include "BrackeysJam26/NPC/NPCCharacter.h"
 #include "../HUD/MenuFlowSubsystem.h"
 
 ABusRouteManager::ABusRouteManager()
@@ -47,6 +48,37 @@ FString ABusRouteManager::GetFormattedTimeRemaining()
 
 	FString SignString = bIsNegative ? TEXT("-") : TEXT("");
 	return FString::Printf(TEXT("%s%02d:%02d"), *SignString, Minutes, Seconds);
+}
+
+void ABusRouteManager::EvaluateEndGame()
+{
+	int32 ImpostersOnBus = 0;
+
+	TArray<AActor*> AllNPCs;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ANPCCharacter::StaticClass(), AllNPCs);
+
+	for (AActor* Actor : AllNPCs)
+	{
+		if (ANPCCharacter* NPC = Cast<ANPCCharacter>(Actor))
+		{
+			if (NPC->IsSitting() && NPC->PassengerRecord.bIsImposter)
+			{
+				ImpostersOnBus++;
+			}
+		}
+	}
+
+	UMenuFlowSubsystem* MenuFlow = GetGameInstance()->GetSubsystem<UMenuFlowSubsystem>();
+	if (!MenuFlow) return;
+
+	if (ImpostersOnBus > 0 || RealNPCsDenied > 1)
+	{
+		MenuFlow->SetRootState(LoseMenuState);
+	}
+	else
+	{
+		MenuFlow->SetRootState(WinMenuState);
+	}
 }
 
 void ABusRouteManager::PerformTeleport()
@@ -154,6 +186,11 @@ void ABusRouteManager::Tick(float DeltaTime)
 			}
 
 			OnArrive.Broadcast();
+
+			if (CurrentStopIndex >= TeleportPoints.Num())
+			{
+				EvaluateEndGame();
+			}
 		}
 	}
 }

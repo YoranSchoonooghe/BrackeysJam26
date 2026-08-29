@@ -87,6 +87,18 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Transition")
 	FOnArrive OnArrive;
 
+	UPROPERTY(EditAnywhere, Category = "Menu")
+	TSubclassOf<UMenuStateBase> WinMenuState;
+
+	UPROPERTY(EditAnywhere, Category = "Menu")
+	TSubclassOf<UMenuStateBase> LoseMenuState;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Stats")
+	int32 RealNPCsDenied = 0;
+
+	UFUNCTION(BlueprintCallable, Category = "Game Flow")
+	void EvaluateEndGame();
+
 private:
 	void PerformTeleport();
 

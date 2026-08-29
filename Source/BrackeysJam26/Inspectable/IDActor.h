@@ -35,6 +35,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	TObjectPtr<UWidgetComponent> PhotoWidget;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "ID")
+	UTexture2D* CurrentPhoto;
+
 	UFUNCTION(BlueprintImplementableEvent, Category = "ID")
 	void UpdatePhotoUI(UTexture2D* NewPhoto);
 

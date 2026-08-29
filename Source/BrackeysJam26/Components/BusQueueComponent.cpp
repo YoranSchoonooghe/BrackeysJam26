@@ -81,6 +81,8 @@ void UBusQueueComponent::SpawnPassengersForStop(ABusStop* Stop)
 			if (GeneratedQueue.IsValidIndex(i))
 			{
 				Passenger->PassengerRecord = GeneratedQueue[i];
+
+				Passenger->RandomizeRaceAndVisuals();
 			}
 
 			PassengersQueue.Enqueue(Passenger);

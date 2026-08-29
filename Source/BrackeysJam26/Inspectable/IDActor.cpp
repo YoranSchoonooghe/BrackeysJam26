@@ -37,7 +37,10 @@ void AIDActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
-
+	if (CurrentPhoto)
+	{
+		UpdatePhotoUI(CurrentPhoto);
+	}
 }
 
 //void AIDActor::Tick(float DeltaTime)
@@ -53,5 +56,6 @@ void AIDActor::UpdateID(const FPassengerData& PassportData)
 	DateOfBirthText->SetText(FText::FromString(PassportData.DOB));
 	IDNumberText->SetText(FText::FromString(PassportData.IDNumber));
 
-	UpdatePhotoUI(PassportData.PassengerPhoto);
+	CurrentPhoto = PassportData.PassengerPhoto;
+	UpdatePhotoUI(CurrentPhoto);
 }
