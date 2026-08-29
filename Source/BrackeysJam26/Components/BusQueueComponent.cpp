@@ -86,8 +86,6 @@ void UBusQueueComponent::SpawnPassengersForStop(ABusStop* Stop)
 			PassengersQueue.Enqueue(Passenger);
 		}
 	}
-
-	StartNextPassenger();
 }
 
 void UBusQueueComponent::StartNextPassenger()

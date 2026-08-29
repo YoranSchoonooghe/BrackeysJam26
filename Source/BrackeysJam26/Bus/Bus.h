@@ -84,10 +84,14 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Bus")
 	FOnDocsVisibilityChanged OnDocsVisibilityChanged;
 
+	UFUNCTION(BlueprintCallable, Category = "Bus")
+	bool AreDoorsOpen() const { return bAreDoorsOpen; }
+
 private:
 	UFUNCTION()
 	void OpenDoors();
 	UFUNCTION()
 	void CloseDoors();
 
+	bool bAreDoorsOpen = false;
 };

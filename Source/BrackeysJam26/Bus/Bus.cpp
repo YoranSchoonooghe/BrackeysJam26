@@ -40,7 +40,7 @@ void ABus::BeginPlay()
 	
 	SetPassengerDocsVisibility(false, false);
 
-	OnOpenDoors.Broadcast();
+	OpenDoors();
 
 	auto* BusManager = Cast<ABusRouteManager>(UGameplayStatics::GetActorOfClass(GetWorld(), ABusRouteManager::StaticClass()));
 	if (BusManager)
@@ -124,11 +124,19 @@ void ABus::UpdatePassengerDocs(const FPassengerRecord& Record)
 
 void ABus::OpenDoors()
 {
+	bAreDoorsOpen = true;
 	OnOpenDoors.Broadcast();
+
+	//Only walk if doors are open
+	if (BusQueue)
+	{
+		BusQueue->StartNextPassenger();
+	}
 }
 
 void ABus::CloseDoors()
 {
+	bAreDoorsOpen = false;
 	OnCloseDoors.Broadcast();
 }
 
