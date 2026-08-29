@@ -111,10 +111,23 @@ FPassengerData ADataManager::GenerateImposterPassport(FPassengerData TrueIdentit
 
 FString ADataManager::GenerateTypo(FString OriginalText)
 {
-	//Swap character with the one next to it
 	if (OriginalText.Len() <= 3) return OriginalText;
 
-	int SwapIndex = FMath::RandRange(1, OriginalText.Len() - 2);
+	TArray<int32> ValidIndices;
+	for (int32 i = 0; i < OriginalText.Len() - 1; i++)
+	{
+		if (OriginalText[i] != OriginalText[i + 1])
+		{
+			ValidIndices.Add(i);
+		}
+	}
+
+	if (ValidIndices.IsEmpty())
+	{
+		return OriginalText;
+	}
+
+	int32 SwapIndex = ValidIndices[FMath::RandRange(0, ValidIndices.Num() - 1)];
 
 	TCHAR Temp = OriginalText[SwapIndex];
 	OriginalText[SwapIndex] = OriginalText[SwapIndex + 1];
@@ -188,44 +201,6 @@ TArray<FPassengerRecord> ADataManager::GeneratePassengerQueue(int32 TotalPasseng
 			NewRecord.PresentedPassport = NewRecord.TrueIdentity;
 			NewRecord.PresentedTicket = NewRecord.TrueTicket;
 		}
-
-		//In case we do multiple days?
-		//if (CurrentImposters < TargetImposters)
-		//{
-		//	NewRecord.bIsImposter = true;
-
-		//	if (CurrentDay == 1)
-		//	{
-		//		//DAY 1: Only passports can be forged, Tickets always valid
-		//		NewRecord.PresentedPassport = GenerateImposterPassport(NewRecord.TrueIdentity);
-		//		NewRecord.PresentedTicket = GenerateValidTicket();
-		//	}
-		//	else if (CurrentDay >= 2)
-		//	{
-		//		//DAY 2: 50/50 chance to forge either Passport or Ticket
-		//		if (FMath::RandBool())
-		//		{
-		//			//Fake Passport, Valid Ticket
-		//			NewRecord.PresentedPassport = GenerateImposterPassport(NewRecord.TrueIdentity);
-		//			NewRecord.PresentedTicket = GenerateValidTicket();
-		//		}
-		//		else
-		//		{
-		//			//Valid Passport, Fake Ticket
-		//			NewRecord.PresentedPassport = NewRecord.TrueIdentity;
-		//			NewRecord.PresentedTicket = GenerateFakeTicket(GenerateValidTicket());
-		//		}
-		//	}
-
-		//	CurrentImposters++;
-		//}
-		//else
-		//{
-		//	//Everything is valid
-		//	NewRecord.bIsImposter = false;
-		//	NewRecord.PresentedPassport = NewRecord.TrueIdentity;
-		//	NewRecord.PresentedTicket = GenerateValidTicket();
-		//}
 
 		DailyQueue.Add(NewRecord);
 	}

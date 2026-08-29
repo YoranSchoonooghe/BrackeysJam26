@@ -126,20 +126,49 @@ void ANPCCharacter::RandomizeRaceAndVisuals()
 		GetMesh()->SetSkeletalMesh(SelectedData.RaceMesh);
 	}
 
+	FFaceVariation SelectedFace;
 	if (!SelectedData.FaceVariations.IsEmpty())
 	{
 		int32 RandomFace = FMath::RandRange(0, SelectedData.FaceVariations.Num() - 1);
-		FFaceVariation SelectedFace = SelectedData.FaceVariations[RandomFace];
+		SelectedFace = SelectedData.FaceVariations[RandomFace];
 
 		if (SelectedFace.FaceMaterial)
 		{
 			GetMesh()->SetMaterial(1, SelectedFace.FaceMaterial);
 		}
+	}
 
-		if (SelectedFace.IDPhoto)
+	bool bDidAssignPhoto = false;
+
+	if (PassengerRecord.bIsImposter && FMath::RandBool() && AvailableRaces.Num() > 1)
+	{
+		TArray<UTexture2D*> ForeignPhotos;
+
+		for (ENPCRace RaceKey : AvailableRaces)
 		{
-			PassengerRecord.PresentedPassport.PassengerPhoto = SelectedFace.IDPhoto;
+			if (RaceKey == SelectedRace) continue;
+
+			const FNPCModelData& OtherData = RaceVisuals[RaceKey];
+			for (const FFaceVariation& OtherFace : OtherData.FaceVariations)
+			{
+				if (OtherFace.IDPhoto)
+				{
+					ForeignPhotos.Add(OtherFace.IDPhoto);
+				}
+			}
 		}
+
+		if (!ForeignPhotos.IsEmpty())
+		{
+			int32 ForeignIndex = FMath::RandRange(0, ForeignPhotos.Num() - 1);
+			PassengerRecord.PresentedPassport.PassengerPhoto = ForeignPhotos[ForeignIndex];
+			bDidAssignPhoto = true;
+		}
+	}
+
+	if (!bDidAssignPhoto && SelectedFace.IDPhoto)
+	{
+		PassengerRecord.PresentedPassport.PassengerPhoto = SelectedFace.IDPhoto;
 	}
 }
 
