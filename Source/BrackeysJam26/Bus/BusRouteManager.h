@@ -99,6 +99,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Game Flow")
 	void EvaluateEndGame();
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Loading")
+	TArray<UTexture2D*> LegLoadingImages;
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Loading")
+	void BP_ShowLoadingScreenForLeg(UTexture2D* CurrentImage, int32 LegIndex);
+
 private:
 	void PerformTeleport();
 

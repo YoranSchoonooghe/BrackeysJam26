@@ -159,7 +159,11 @@ void ABusRouteManager::Tick(float DeltaTime)
 			{
 				CurrentState = ETransitionState::Loading;
 				CurrentLoadTime = 0.0f;
-				BP_ToggleLoadingImage(true);
+
+				int32 LegIndex = FMath::Clamp(CurrentStopIndex - 1, 0, LegLoadingImages.Num() - 1);
+				UTexture2D* CurrentImage = LegLoadingImages.IsValidIndex(LegIndex) ? LegLoadingImages[LegIndex] : nullptr;
+
+				BP_ShowLoadingScreenForLeg(CurrentImage, LegIndex);
 			}
 		}
 	}
