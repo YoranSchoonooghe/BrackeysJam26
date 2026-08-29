@@ -114,6 +114,18 @@ bool ABusSeat::IsOccupied() const
 	return (Occupant != nullptr);
 }
 
+bool ABusSeat::IsOccupiedByImposter() const
+{
+	if (!Occupant) return false;
+
+	if (Occupant->PassengerRecord.bIsImposter)
+	{
+		return true;
+	}
+
+	return false;
+}
+
 void ABusSeat::SetButtonVisible(bool bVisible)
 {
 	const bool bShow = bVisible && IsOccupied();

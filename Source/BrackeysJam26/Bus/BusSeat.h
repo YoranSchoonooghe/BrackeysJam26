@@ -42,6 +42,8 @@ public:
 	void Eject();
 	UFUNCTION(BlueprintCallable, Category = "Seat")
 	bool IsOccupied() const;
+	UFUNCTION(BlueprintCallable, Category = "Seat")
+	bool IsOccupiedByImposter() const;
 
 	UFUNCTION(BlueprintCallable, Category = "Seat")
 	void SetButtonVisible(bool bVisible);

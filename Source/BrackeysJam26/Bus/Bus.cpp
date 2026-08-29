@@ -7,6 +7,7 @@
 #include "BrackeysJam26/Inspectable/TicketActor.h"
 #include "BusRouteManager.h"
 #include <Kismet/GameplayStatics.h>
+#include "BrackeysJam26/Components/ImposterSoundComponent.h"
 
 ABus::ABus()
 {
@@ -32,6 +33,8 @@ ABus::ABus()
 
 	BusQueue = CreateDefaultSubobject<UBusQueueComponent>(TEXT("BusQueue"));
 	BusQueue->OnQueueEmpty.AddDynamic(this, &ABus::CloseDoors);
+
+	ImposterSound = CreateDefaultSubobject<UImposterSoundComponent>(TEXT("ImposterSound"));
 }
 
 void ABus::BeginPlay()
@@ -120,6 +123,23 @@ void ABus::UpdatePassengerDocs(const FPassengerRecord& Record)
 	{
 		TicketActor->UpdateTicket(Record.PresentedTicket);
 	}
+}
+
+int32 ABus::GetNumberOfImposters() const
+{
+	int32 nrOfImposters{ 0 };
+
+	for (auto* Seat : Seats)
+	{
+		if (!Seat) continue;
+
+		if (Seat->IsOccupiedByImposter())
+		{
+			++nrOfImposters;
+		}
+	}
+
+	return nrOfImposters;
 }
 
 void ABus::OpenDoors()
