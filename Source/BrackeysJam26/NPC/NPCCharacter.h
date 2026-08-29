@@ -72,6 +72,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "NPC|Visuals")
 	void RandomizeRaceAndVisuals();
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "Data")
+	void OnRecordAssigned();
+
 private:
 	void AssignSeat();
 

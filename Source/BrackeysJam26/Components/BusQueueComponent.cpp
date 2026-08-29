@@ -83,6 +83,8 @@ void UBusQueueComponent::SpawnPassengersForStop(ABusStop* Stop)
 				Passenger->PassengerRecord = GeneratedQueue[i];
 
 				Passenger->RandomizeRaceAndVisuals();
+
+				Passenger->OnRecordAssigned();
 			}
 
 			PassengersQueue.Enqueue(Passenger);
