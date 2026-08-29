@@ -11,6 +11,7 @@ class ABusSeat;
 class UBusQueueComponent;
 class AIDActor;
 class ATicketActor;
+class UImposterSoundComponent;
 
 UCLASS()
 class BRACKEYSJAM26_API ABus : public AActor
@@ -37,6 +38,8 @@ protected:
 	TObjectPtr<UArrowComponent> DespawnLocation;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<UBusQueueComponent> BusQueue;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	TObjectPtr<UImposterSoundComponent> ImposterSound;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Seats")
 	TArray<ABusSeat*> Seats;
@@ -71,6 +74,8 @@ public:
 	void UpdatePassengerDocs(const FPassengerRecord& Record);
 
 	const TArray<ABusSeat*>& GetSeats() const { return Seats; }
+
+	int32 GetNumberOfImposters() const;
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnBusOpenDoors);
 	UPROPERTY(BlueprintAssignable, Category = "Bus")
