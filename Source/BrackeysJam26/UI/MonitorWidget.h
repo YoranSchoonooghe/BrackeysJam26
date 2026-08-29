@@ -31,6 +31,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Monitor")
 	void UpdateCharacterInfo(const FPassengerRecord& Record);
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "Easter Eggs")
+	void BP_OnMichaelJacksonAppeared();
+
 protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidgetOptional))
 	TObjectPtr<UWidgetSwitcher> ScreenSwitcher;

@@ -110,16 +110,11 @@ FPassengerData ADataManager::GenerateImposterPassport(FPassengerData TrueIdentit
 {
 	FPassengerData ForgedPassport = TrueIdentity;
 
-	int DiscrepancyType = FMath::RandRange(1, 7);
+	int DiscrepancyType = FMath::RandRange(1, 3);
 
 	switch (DiscrepancyType)
 	{
 	case 1:
-		//Typo in First Name
-		ForgedPassport.FirstName = GenerateTypo(TrueIdentity.FirstName);
-		break;
-
-	case 2:
 		//Different First Name
 		if (FirstNames.Num() > 0)
 		{
@@ -127,17 +122,7 @@ FPassengerData ADataManager::GenerateImposterPassport(FPassengerData TrueIdentit
 		}
 		break;
 
-	case 3:
-		//Typo in ID Number
-		ForgedPassport.IDNumber = GenerateTypo(TrueIdentity.IDNumber);
-		break;
-
-	case 4:
-		//Typo in Last Name
-		ForgedPassport.LastName = GenerateTypo(TrueIdentity.LastName);
-		break;
-
-	case 5:
+	case 2:
 		//Different Last Name
 		if (LastNames.Num() > 0)
 		{
@@ -145,14 +130,9 @@ FPassengerData ADataManager::GenerateImposterPassport(FPassengerData TrueIdentit
 		}
 		break;
 
-	case 6:
+	case 3:
 		//Completely Fake ID Number
 		ForgedPassport.IDNumber = FString::Printf(TEXT("%06d"), FMath::RandRange(100000, 999999));
-		break;
-
-	case 7:
-		//Typo in Date of Birth
-		ForgedPassport.DOB = GenerateTypo(TrueIdentity.DOB);
 		break;
 	}
 
