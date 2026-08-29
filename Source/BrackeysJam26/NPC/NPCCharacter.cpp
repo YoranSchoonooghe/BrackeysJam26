@@ -9,6 +9,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include <Kismet/GameplayStatics.h>
 #include "BrackeysJam26/Bus/BusRouteManager.h"
+#include "NPCAIController.h"
 #include "BrackeysJam26/Components/ExpireComponent.h"
 
 ANPCCharacter::ANPCCharacter()
@@ -34,6 +35,14 @@ void ANPCCharacter::ChangeState(ENPCState NewState)
 	if (NPCState == NewState) return;
 
 	NPCState = NewState;
+
+	if (NPCState == ENPCState::EnterBus)
+	{
+		if (auto* AIController = Cast<ANPCAIController>(GetController()))
+		{
+			AIController->RefreshBusKeys();
+		}
+	}
 
 	if (NPCState == ENPCState::WalkToSeat)
 	{

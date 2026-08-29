@@ -92,10 +92,17 @@ void ABusRouteManager::PerformTeleport()
 		BP_UpdateStopScreen(NextName);
 	}
 
+	if (!TeleportPoints.IsValidIndex(CurrentStopIndex) || !FinalStopPoints.IsValidIndex(CurrentStopIndex))
+	{
+		UE_LOG(LogTemp, Error, TEXT("PerformTeleport: invalid index %d (TeleportPoints=%d, FinalStopPoints=%d)"),
+			CurrentStopIndex, TeleportPoints.Num(), FinalStopPoints.Num());
+	}
+
 	if (TeleportPoints.IsValidIndex(CurrentStopIndex) && FinalStopPoints.IsValidIndex(CurrentStopIndex))
 	{
 		FTransform NewTransform = TeleportPoints[CurrentStopIndex]->GetActorTransform();
 		BusReference->SetActorTransform(NewTransform, false, nullptr, ETeleportType::TeleportPhysics);
+
 
 		StartLocation = BusReference->GetActorLocation();
 		TargetLocation = FinalStopPoints[CurrentStopIndex]->GetActorLocation();

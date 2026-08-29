@@ -17,7 +17,7 @@ void ANPCAIController::BeginPlay()
 	Super::BeginPlay();
 
 	RunBehaviorTree(BTNPC);
-	InitBBKeys();
+	RefreshBusKeys();
 }
 
 void ANPCAIController::Tick(float DeltaTime)
@@ -30,6 +30,24 @@ void ANPCAIController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
 
+}
+
+void ANPCAIController::RefreshBusKeys()
+{
+	auto* pBlackboardComponent = GetBlackboardComponent();
+	if (!pBlackboardComponent) return;
+
+	ABus* Bus = Cast<ABus>(UGameplayStatics::GetActorOfClass(GetWorld(), ABus::StaticClass()));
+	if (!Bus) return;
+
+	pBlackboardComponent->SetValueAsVector(TEXT("CheckLocation"), Bus->GetCheckLocation());
+	pBlackboardComponent->SetValueAsVector(TEXT("ExitLocation"), Bus->GetExitLocation());
+	pBlackboardComponent->SetValueAsVector(TEXT("DespawnLocation"), Bus->GetDespawnLocation());
+
+	if (auto* Seat = Bus->GetAvailableSeat())
+	{
+		pBlackboardComponent->SetValueAsObject(TEXT("TargetSeat"), Seat);
+	}
 }
 
 void ANPCAIController::InitBBKeys()

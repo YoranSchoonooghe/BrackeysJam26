@@ -12,6 +12,8 @@ class BRACKEYSJAM26_API ANPCAIController : public AAIController
 public:
 	ANPCAIController();
 
+	void RefreshBusKeys();
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
@@ -19,6 +21,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "BehaviorTree")
 	TObjectPtr<UBehaviorTree> BTNPC;
+
 
 private:
 	void InitBBKeys();
