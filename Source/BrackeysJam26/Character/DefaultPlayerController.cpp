@@ -129,7 +129,7 @@ void ADefaultPlayerController::ShowCharacterInfoWidget(const FPassengerRecord& R
 {
 	if (!CharacterInfoWidgetInstance) return;
 
-	CharacterInfoWidgetInstance->UpdateCharacterInformation(Record.TrueIdentity, Record.TrueTicket);
+	CharacterInfoWidgetInstance->UpdateCharacterInformation(Record.TrueIdentity, Record.TrueTicket, Record.TrueIdentity.PassengerPhoto);
 	CharacterInfoWidgetInstance->AddToViewport();
 }
 
